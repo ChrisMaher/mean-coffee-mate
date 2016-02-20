@@ -7,7 +7,7 @@ module.exports = {
                 'public/lib/bootstrap/dist/css/bootstrap.css',
                 'public/lib/bootstrap/dist/css/bootstrap-theme.css',
                 'public/lib/angular-material/angular-material.css',
-                'http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css'
+                'public/lib/font-awesome/css/font-awesome.css'
             ],
             js: [
                 'public/lib/angular/angular.min.js',
