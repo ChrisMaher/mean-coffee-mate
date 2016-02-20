@@ -10,10 +10,10 @@ angular.module('coffees').config(['$stateProvider',
         url: '/coffees',
         template: '<ui-view/>'
       })
-      .state('coffees.list', {
-        url: '',
-        templateUrl: 'modules/coffees/client/views/list-coffees.client.view.html'
-      })
+      // .state('coffees.list', {
+      //   url: '',
+      //   templateUrl: 'modules/coffees/client/views/list-coffees.client.view.html'
+      // })
       .state('coffees.create', {
         url: '/create',
         templateUrl: 'modules/coffees/client/views/create-coffee.client.view.html',
