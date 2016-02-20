@@ -1,0 +1,316 @@
+<div class="col-sm-12" id="below-navbar">
+
+    <ul class="nav nav-tabs img-rounded" id="hottest-tabs">
+        <li role="presentation" class="active"><a href="#"><i class="glyphicon glyphicon-thumbs-up"></i> Save Me </a>
+        </li>
+    </ul>
+
+    <ul class="nav nav-tabs " id="submit-tabs">
+        <li role="presentation"><a href="/posts/create"><i class="glyphicon glyphicon-plus-sign"></i> Submit </a></li>
+    </ul>
+
+
+</div>
+<section data-ng-controller="PostsController" data-ng-init="findOne()">
+    <!--<section data-ng-controller="HomeController">-->
+
+
+        <div class="col-lg-9 main-posts">
+
+            <!--Posts Array Start-->
+
+
+            <div class="list-group-home-single">
+
+
+                <div class="col-lg-12 no-padding-left">
+
+                    <div class="col-lg-2" id="single-left-box">
+
+                        <!--<div class="left-box-one"><h4 class="list-group-item-heading" data-ng-bind="post.name"></h4></div>-->
+
+
+                        <div class="left-box-one">
+
+                            <h1 class="list-group-item-heading" data-ng-bind="post.votes"></h1>
+
+                        </div>
+
+
+                        <div class="left-box-two">
+
+                            <div class="btn-group-vertical hot-cold-buttons" role="group" aria-label="Vertical button group">
+
+
+
+                              <button ng-hide="authentication.user" ui-sref="authentication.signup" type="button" class="btn btn-danger vote-up-button"><i class="glyphicon glyphicon-arrow-up"></i> Hot</button>
+                              <button ng-hide="authentication.user" ui-sref="authentication.signup" type="button" class="btn btn-default"><i class="glyphicon glyphicon-arrow-down  vote-down-button"></i> Cold</button>
+
+                              <button ng-show="authentication.user" ng-click="upVoteHome(post)" type="button" class="btn btn-danger vote-up-button"><i class="glyphicon glyphicon-arrow-up"></i> Hot</button>
+                              <button ng-show="authentication.user" ng-click="downVoteHome(post)" type="button" class="btn btn-default"><i class="glyphicon glyphicon-arrow-down  vote-down-button"></i> Cold</button>
+
+                            </div>
+
+
+                        </div>
+
+                        <div class="left-box-three" data-ng-show="authentication.user">
+
+                            <!-- <button type="button" class="btn-xs btn-warning">Hide</button> -->
+                            <button type="button" class="btn-xs btn-danger">Report</button>
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="col-lg-8" id="single-middle-box">
+
+
+                        <div class="col-lg-12 single-middle-title"><h4
+                                data-ng-bind="post.title +' (&euro;'+  post.price +' @ '+  post.retailer+')'"></h4>
+                        </div>
+
+                        <div class="col-lg-12 single-middle-product-details">
+
+                          <!--<p>{{post.details}}</p>-->
+                          <text-angular ta-toolbar="[[]]" ng-bind-html="post.details"></text-angular>
+
+                        </div>
+
+                        <div class="col-lg-12 single-middle-post-details">
+
+                            <div class="col-lg-6 single-middle-posted-by">Posted By <span class="username"
+                                    data-ng-bind="post.user.username"></span></div>
+                            <div class="col-lg-6 single-middle-time-of-posting">Posted On <span
+                                    data-ng-bind="post.created | date:'mediumDate'"></span></div>
+
+                        </div>
+
+
+                        <!--<small class="list-group-item-text">-->
+                        <!--Posted on-->
+                        <!--<span data-ng-bind="post.created | date:'medium'"></span>-->
+                        <!--by-->
+                        <!--<span data-ng-bind="post.user.displayName"></span>-->
+                        <!--</small>-->
+
+
+                    </div>
+
+                    <div class="col-lg-2" id="single-right-box">
+
+                        <div class="col-md-12 post-image thumbnail"><img src="{{post.image}}" width="120" height="120"/>
+                        </div>
+                        <div class="col-md-12 post-link link-button"><a href="{{post.link}}" target="_blank">
+                            <button class="btn btn-success">Save Me</button>
+                        </a></div>
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+            <!-- Posts Section Start -->
+
+            <div class="posts-box-under-post">
+
+
+                <section data-ng-controller="PostsController" data-ng-init="find()">
+
+                    <h3>New Post</h3>
+
+                    <div class="col-md-12">
+                        <form class="form-horizontal" data-ng-submit="create()" novalidate>
+                            <fieldset>
+
+
+                                <div class="form-group">
+
+                                    <!--<label class="control-label" for="details">Post</label>-->
+                                    <!--<div class="controls">-->
+                                    <!--<input type="text" data-ng-model="details" id="details" class="form-control"-->
+                                    <!--placeholder="Post" required>-->
+
+                                    <!--</div>-->
+
+                                    <!--<label class="control-label" for="details">Post:</label>-->
+                                    <textarea class="form-control" data-ng-model="details" rows="5" id="details">Post.....</textarea>
+
+                                </div>
+
+
+                                <div class="col-lg-7">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-default">Post Post</button>
+                                    </div>
+                                    <div data-ng-show="error" class="text-danger">
+                                        <strong data-ng-bind="error"></strong>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-5">
+                                    <div class="form-group">
+                                        <dir-pagination-controls boundary-links="true"
+                                                                 on-page-change="pageChangeHandler(newPageNumber)"
+                                                                 template-url="dirPagination.tpl.html">
+
+                                        </dir-pagination-controls>
+                                    </div>
+                                </div>
+
+
+                            </fieldset>
+                        </form>
+                    </div>
+
+                    <h3>Posts</h3>
+
+                    <div class="list-group">
+
+                        <!--<a data-ng-repeat=" in posts" data-ng-href="#!/posts/{{post._id}}" class="list-group-item">-->
+
+                        <!--<a data-ng-repeat="post in posts | filter:{ postId: post._id} " class="list-group-item post-box-single">-->
+
+                        <div dir-paginate="post in posts|filter:{ postId: post._id}|itemsPerPage:12"
+                             class="list-group-item post-box-single"
+                        ">
+
+                        <div class="col-sm-12 outer-post-box">
+                            <div class="col-sm-2 post-box-left">
+
+                                Avatar
+
+                            </div>
+                            <div class="col-sm-10  post-box-middle">
+
+                                <div class="col-sm-12  post-box-middle-top">
+
+                                    <small class="list-group-item-text">
+                                        Post : <span data-ng-bind="post.details"></span>
+
+                                    </small>
+
+
+                                </div>
+
+                                <div class="col-sm-12 post-box-middle-bottom">
+
+                                    <small class="list-group-item-text">
+                                        Posted on
+                                        <span data-ng-bind="post.created | date:'medium'"></span>
+                                        by
+                                        <span data-ng-bind="post.user.username"></span>
+                                    </small>
+
+                                </div>
+
+
+                            </div>
+                            <!--<div class="col-sm-2  post-box-right">-->
+
+                            <!--Reply Button</br>-->
+                            <!--Post ID-->
+
+
+                            <!--</div>-->
+
+                        </div>
+
+
+                        <!--<h4 class="list-group-item-heading" data-ng-bind="post.name"></h4>-->
+
+                        </a>
+
+                    </div>
+
+
+                    <div class="alert alert-warning text-center" data-ng-hide="!posts.$resolved || posts.length">
+                        No Posts yet, why don't you <a href="/#!/posts/create">write one</a>?
+                    </div>
+
+                  <div ng-show="error" class="text-danger">
+                    <strong ng-bind="error"></strong>
+                  </div>
+
+
+                </section>
+
+
+            </div>
+
+            <!--Posts Array End-->
+
+
+            <!--Posts Array End-->
+
+
+        </div>
+
+        <div class="col-lg-3 right-column">
+
+            <div class="col-lg-12 right-column-inner-one">
+
+
+            </div>
+
+            <div class="col-lg-12 right-column-inner-two">
+
+
+            </div>
+
+            <div class="col-lg-12 right-column-inner-three">
+
+
+            </div>
+
+
+        </div>
+
+
+        <!--<div class="col-lg-9 ">-->
+
+
+            <!--<div class="text-center">-->
+                <!--<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)"-->
+                                         <!--template-url="dirPagination.tpl.html"></dir-pagination-controls>-->
+            <!--</div>-->
+
+
+        <!--</div>-->
+
+
+        <!--<div class="col-sm-12" id="footer">-->
+        <!--<div class="row">-->
+
+        <!--<div class="margin">-->
+        <!--<div class="col-lg-6" ng-repeat="alert in alerts">-->
+        <!--<div class="row">-->
+        <!--<div class="col-xs-4">-->
+        <!--<h1 class="pull-right">-->
+        <!--<button type="button" class="btn " ng-class="alert.colour">-->
+        <!--<i class="glyphicon " ng-class="alert.icon"></i>-->
+        <!--</button>-->
+        <!--</h1>-->
+        <!--</div>-->
+        <!--<div class="col-xs-8">-->
+        <!--<h1>{{alert.total}}</h1>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<div class="row">-->
+        <!--<div class="col-xs-8 col-xs-offset-4">-->
+        <!--<span class="text-muted">{{alert.description}}</span>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--</div>-->
+        </div>
+
+    <!--</section>-->
+</section>
+</section>

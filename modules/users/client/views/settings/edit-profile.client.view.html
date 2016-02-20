@@ -1,0 +1,135 @@
+<section class="row" ng-controller="EditProfileController">
+
+
+  <div class="row">
+    <form name="userForm" ng-submit="updateUserProfile(userForm.$valid)" class="signin" novalidate autocomplete="off">
+      <div class="col-md-6">
+        <fieldset>
+          <div class="form-group" show-errors>
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" name="firstName" class="form-control" ng-model="user.firstName"
+                   placeholder="First Name" required>
+            <div ng-messages="userForm.firstName.$error" role="alert">
+              <p class="help-block error-text" ng-message="required">First name is required.</p>
+            </div>
+          </div>
+          <div class="form-group" show-errors>
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" name="lastName" class="form-control" ng-model="user.lastName"
+                   placeholder="Last Name" required>
+            <div ng-messages="userForm.lastName.$error" role="alert">
+              <p class="help-block error-text" ng-message="required">Last name is required.</p>
+            </div>
+          </div>
+
+          <div class="form-group" show-errors>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" class="form-control" ng-model="user.email" placeholder="Email"
+                   lowercase required>
+            <div ng-messages="userForm.email.$error" role="alert">
+              <p class="help-block error-text" ng-message="required">Email address is required.</p>
+              <p class="help-block error-text" ng-message="email">Email address is invalid.</p>
+            </div>
+          </div>
+
+          <div class="form-group" show-errors>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" class="form-control" ng-model="user.username"
+                   placeholder="Username" lowercase required>
+            <div ng-messages="userForm.username.$error" role="alert">
+              <p class="help-block error-text" ng-message="required">Username is required.</p>
+            </div>
+          </div>
+
+          <div class="form-group" show-errors>
+            <label for="gender">Gender</label>
+
+            <select name="gender" ng-model="user.gender" class="form-control" id="gender" required>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+
+            <div ng-messages="coffeeForm.gender.$error" role="alert">
+              <p class="help-block error-text" ng-message="required">Gender is required.</p>
+            </div>
+          </div>
+
+
+        </fieldset>
+      </div>
+      <div class="col-md-6">
+        <fieldset>
+
+
+
+
+          <div class="form-group" show-errors>
+            <label for="county">County</label>
+
+            <select name="county" ng-model="user.county" class="form-control" id="county" required>
+              <option value="antrim">Antrim</option>
+              <option value="armagh">Armagh</option>
+              <option value="carlow">Carlow</option>
+              <option value="cavan">Cavan</option>
+              <option value="clare">Clare</option>
+              <option value="cork">Cork</option>
+              <option value="derry">Derry</option>
+              <option value="donegal">Donegal</option>
+              <option value="down">Down</option>
+              <option value="dublin">Dublin</option>
+              <option value="fermanagh">Fermanagh</option>
+              <option value="galway">Galway</option>
+              <option value="kerry">Kerry</option>
+              <option value="kildare">Kildare</option>
+              <option value="kilkenny">Kilkenny</option>
+              <option value="laois">Laois</option>
+              <option value="leitrim">Leitrim</option>
+              <option value="limerick">Limerick</option>
+              <option value="longford">Longford</option>
+              <option value="louth">Louth</option>
+              <option value="mayo">Mayo</option>
+              <option value="meath">Meath</option>
+              <option value="monaghan">Monaghan</option>
+              <option value="offaly">Offaly</option>
+              <option value="roscommon">Roscommon</option>
+              <option value="sligo">Sligo</option>
+              <option value="tipperary">Tipperary</option>
+              <option value="tyrone">Tyrone</option>
+              <option value="waterford">Waterford</option>
+              <option value="westmeath">Westmeath</option>
+              <option value="wexford">Wexford</option>
+              <option value="wicklow">Wicklow</option>
+            </select>
+
+            <div ng-messages="coffeeForm.county.$error" role="alert">
+              <p class="help-block error-text" ng-message="required">Category is required.</p>
+            </div>
+          </div>
+
+
+          <div class="form-group" show-errors>
+            <label for="aboutme">About Me</label>
+            <text-angular
+              ta-toolbar="[['bold','italics', 'underline', 'strikeThrough'],['justifyLeft', 'justifyCenter', 'justifyRight'], ['insertLink', 'undo']]"
+              id="aboutme" name="aboutme" ng-model="user.aboutme">
+            </text-angular>
+          </div>
+
+
+          <div class="text-center form-group">
+            <button type="submit" class="btn btn-sm btn-primary">Save Profile</button>
+          </div>
+          <div ng-show="success" class="text-center text-success">
+            <strong>Profile Saved Successfully</strong>
+          </div>
+          <div ng-show="error" class="text-center text-danger">
+            <strong ng-bind="error"></strong>
+          </div>
+        </fieldset>
+      </div>
+    </form>
+  </div>
+
+
+</section>

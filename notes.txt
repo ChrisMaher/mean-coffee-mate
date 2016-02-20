@@ -1,0 +1,20 @@
+APP
+--------------------------------------------------------
+
+API
+
+Check if user exists with Google or Facebook email.
+If yes allow to post deals from app.
+If no register new account, then allow to post
+
+CREATE
+UPDATE
+
+WEBSITE
+----------------------------------------------------------
+
+Add Image selection to Form.
+
+Add Variable to Model - Done
+
+

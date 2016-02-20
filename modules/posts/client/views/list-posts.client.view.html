@@ -1,0 +1,114 @@
+<section data-ng-controller="HomeController">
+  <section data-ng-controller="PostsController" data-ng-init="find()">
+
+    <div class="list-group-home-posts">
+    <div dir-paginate="post in posts|orderBy:orderByField:reverseSort|filter:{retailer:filterBy}|itemsPerPage:10" class="list-group-item">
+
+      <div class="col-lg-12 no-padding-left">
+
+        <div class="col-lg-2 right-box">
+
+          <div data-ng-href="#!/posts/{{post._id}}" class="col-md-12 post-votes">
+
+            <h1>{{post.votes}}</h1>
+
+          </div>
+
+          <div class="col-md-12 post-link link-button-home">
+
+            <!--<button class="btn btn-default "><i class="glyphicon glyphicon-thumbs-up"></i> Like</button>-->
+
+            <div class="btn-group-vertical hot-cold-buttons" role="group"
+                 aria-label="Vertical button group">
+
+              <button type="button" class="btn btn-danger  vote-up-button"><i
+                class="glyphicon glyphicon-arrow-up"></i> Hot
+              </button>
+
+              <button type="button" class="btn btn-default"><i
+                class="glyphicon glyphicon-arrow-down  vote-down-button"></i> Cold
+              </button>
+
+            </div>
+
+          </div>
+
+
+        </div>
+
+        <div class="col-lg-8 middle-box">
+
+
+          <div class="col-lg-12 middle-title">
+
+            <!--<h4 href="#!/posts/{{post._id}}" ng-bind="post.title +' (&euro;'+  post.price +' @ '+  post.retailer+')'"></h4>-->
+            <h4><a ng-href="#!/posts/{{post._id}}"
+                   ng-bind="post.title +' (&euro;'+  post.price +' @ '+  post.retailer+')'"></a>
+            </h4>
+
+          </div>
+
+          <div class="col-lg-12 single-middle-product-details">
+
+            <!--<p>{{post.details}}</p>-->
+            <text-angular ta-toolbar="[[]]" ng-bind-html="post.details"></text-angular>
+
+          </div>
+
+          <div class="col-lg-12 middle-post-details">
+
+            <div class="col-lg-6 middle-posted-by">Posted By  <span class="username"
+                                                                    data-ng-bind="post.user.username"></span></div>
+            <div class="col-lg-6 middle-time-of-posting">Posted On <span
+              data-ng-bind="post.created | date:'mediumDate'"></span></div>
+
+          </div>
+
+
+          <!--<small class="list-group-item-text">-->
+          <!--Posted on-->
+          <!--<span data-ng-bind="post.created | date:'medium'"></span>-->
+          <!--by-->
+          <!--<span data-ng-bind="post.user.username"></span>-->
+          <!--</small>-->
+
+
+        </div>
+
+        <div class="col-lg-2" id="right-box">
+
+          <div class="col-md-12 post-image thumbnail centred-image"><img src="{{post.urlimage}}"/>
+
+          </div>
+
+          <a data-ng-href="#!/posts/{{post._id}}" class="col-md-12 post-link link-button">
+            <button class="btn btn-success"><i class="glyphicon glyphicon-euro"></i> Save </button>
+          </a>
+
+
+        </div>
+
+      </div>
+
+    </div>
+    </div>
+
+
+    <div class="list-group">
+        <a data-ng-repeat="post in posts" data-ng-href="/posts/{{post._id}}" class="list-group-item">
+
+			<small class="list-group-item-text">
+				Posted on
+				<span data-ng-bind="post.created | date:'medium'"></span>
+				by
+				<span data-ng-bind="post.user.username"></span>
+			</small>
+
+        </a>
+    </div>
+    <div class="alert alert-warning text-center" data-ng-hide="!posts.$resolved || posts.length">
+    	No Posts yet, why don't you <a href="/posts/create">create one</a>?
+    </div>
+
+  </section>
+</section>

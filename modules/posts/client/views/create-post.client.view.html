@@ -1,0 +1,242 @@
+<div class="col-sm-12" id="below-navbar">
+
+  <ul class="nav nav-tabs img-rounded" id="hottest-tabs">
+    <li role="presentation" class="active"><a href="#"><i class="glyphicon glyphicon-thumbs-up"></i> New Post </a>
+    <li role="presentation" ><a href="#"><i class="glyphicon glyphicon-thumbs-up"></i> New Coupon </a>
+    </li>
+  </ul>
+
+</div>
+
+<section data-ng-controller="PostsController as postsCTRL">
+  <div class="body-content">
+    <!--<div class="page-header">-->
+
+    <!--</div>-->
+    <div class="col-sm-12 create-body">
+
+
+      <div class="col-md-12">
+
+
+        <div class="col-md-6">
+
+          <form name="createPostForm" class="form-horizontal"  novalidate>
+            <fieldset>
+
+            <div class="form-group new-post-form" show-errors>
+
+              <label class="control-label" for="title">Title</label>
+
+              <div ng-show="error" class="text-danger">
+                <strong ng-bind="error"></strong>
+              </div>
+
+              <div class="controls" ng-class="{ 'has-error' : createPostForm.title.$invalid && submitted}">
+                <input name="title" type="text" data-ng-model="postsCTRL.title" id="title" class="form-control" required>
+                <div class="sub-label">Enter the Title of the Post.</div>
+              </div>
+            </div>
+
+            <div class="form-group new-post-form" >
+              <label class="control-label" for="link">Link</label>
+
+              <div class="controls" ng-class="{ 'has-error' : createPostForm.link.$invalid && submitted}">
+                <input name="link" type="url" data-ng-model="postsCTRL.link" id="link" class="form-control" required>
+
+                <div class="sub-label">Enter the Link to the Post.</div>
+              </div>
+            </div>
+
+            <div class="form-group  new-post-form">
+
+              <label class="control-label" for="details">DETAILS</label>
+
+              <div class="controls">
+                                    <!--<textarea data-ng-model="postsCTRL.details" id="details" class="form-control"-->
+                                              <!--rows="6"-->
+                                              <!--placeholder="Please enter in your own words why this is a good post and try to avoid copy and paste of Marketing material.-->
+
+<!--Also note that this is a family website so please avoid using bad language or insults. Thank You."></textarea>-->
+
+                 <div >
+
+                   <text-angular ta-toolbar="[['bold','italics'],['justifyLeft', 'justifyCenter', 'justifyRight'],
+                              ['insertLink']]"  id="details" name="details" data-ng-model="postsCTRL.details">
+
+                   </text-angular >
+
+                 </div>
+
+
+
+
+                                </div>
+
+                              </div>
+
+                              <div class="form-group  new-post-form" >
+                                <label class="control-label" for="retailer">RETAILER</label>
+
+                                <div class="controls" ng-class="{ 'has-error' : createPostForm.retailer.$invalid && submitted}">
+                                  <input name="retailer" type="text" data-ng-model="postsCTRL.retailer" id="retailer" class="form-control" required>
+
+                                  <div class="sub-label">Enter the Retailer of the Post.</div>
+                                </div>
+                              </div>
+
+                              <div class="form-group  new-post-form">
+                                <label class="control-label" for="price">PRICE</label>
+
+                                <div class="controls" ng-class="{ 'has-error' : createPostForm.price.$invalid && submitted}">
+                                  <input name="price" type="Number" data-ng-model="postsCTRL.price" id="price" class="form-control" placeholder="0" required>
+
+                                  <div class="sub-label">Enter the Price of the Post.</div>
+                                </div>
+                              </div>
+
+                              <div data-ng-show="error" class="text-danger">
+                                <strong data-ng-bind="error"></strong>
+                              </div>
+
+                            </form>
+                          </div>
+
+
+                          <div class="col-md-6 create-post-image-upload new-post-form">
+
+
+                            <div class="col-md-7 create-post-image-detais">
+
+                              <div class="manual-upload" ng-show="postsCTRL.urlimage.length === undefined">
+
+                              <label class="control-label" for="urlimage">IMAGE UPLOAD</label>
+
+                              <div class="text-center form-group controls" ng-hide="uploaderProduct.queue.length">
+                            <span class="btn btn-default btn-file">
+                                Select Image <input type="file" nv-file-select uploader="uploaderProduct">
+
+                            </span>
+                              </div>
+
+                              <div class="sub-label"> Upload an image of product.</div></br>
+
+                              <div class="text-center form-group" ng-show="uploaderProduct.queue.length">
+                                <button class="btn btn-primary" ng-click="uploadProductPicture();">Upload</button>
+                                <button class="btn btn-default" ng-click="cancelProductUpload();">Delete</button>
+                              </div>
+
+
+
+                              <div ng-show="success" class="text-center text-success">
+                                <strong>Upload Successful</strong>
+                              </div>
+                              <div ng-show="error" class="text-center text-danger">
+                                <strong ng-bind="error"></strong>
+                              </div>
+
+                              </div>
+
+                              <div class="add-image-link">
+
+                              <label class="control-label" for="urlimage" ng-hide="uploaderProduct.queue.length">IMAGE URL</label>
+
+                              <div class="controls" ng-hide="uploaderProduct.queue.length">
+                                <input type="url" data-ng-model="postsCTRL.urlimage" id="urlimage" class="form-control"
+                                       placeholder="Image URL" ng-change="blankPhoto()" required>
+
+                                <div class="sub-label">Manually enter an image URL.</div>
+
+                              </div>
+
+                              </div>
+
+                            </div>
+
+
+                            <div class="col-md-5 create-post-image-preview"></br></br>
+
+                                <img ng-src="{{productImageURL}}"  class="img-thumbnail product-upload-picture">
+
+                            </div>
+
+                            <div class="col-md-12">
+
+                              <div class="form-group  new-post-form">
+                                <label class="control-label" for="tags">TAGS</label>
+
+                                <div class="controls">
+                                  <input type="text" data-ng-model="postsCTRL.tags" id="tags" class="form-control"
+                                         placeholder="">
+
+                                  <div class="sub-label">Enter tags separated by commas</div>
+                                </div>
+                              </div>
+
+                              <div class="row">
+
+                                <div class="col-lg-6">
+                                  <div class="form-group  new-post-form">
+                                    <label class="control-label" for="startdate">Start Date</label>
+
+                                    <div class="controls">
+                                      <input type="date" data-ng-model="postsCTRL.startdate" id="startdate"
+                                             class="form-control"
+                                             placeholder="">
+
+                                      <div class="sub-label">Enter Starting Date of the Post</div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="col-lg-6">
+
+                                  <div class="form-group  new-post-form">
+                                    <label class="control-label" for="enddate">End Date</label>
+
+                                    <div class="controls">
+                                      <input type="date" data-ng-model="postsCTRL.enddate" id="enddate"
+                                             class="form-control"
+                                             placeholder="">
+
+                                      <div class="sub-label">Enter End Date of the Post</div>
+                                    </div>
+                                  </div>
+
+                                </div>
+
+
+                              </div>
+
+
+                              <!-- /.row -->
+
+
+            </br></br>
+
+            <div class="form-group buttons-cancel-submit">
+              <button class="btn btn-default " ng-click="cancel()">Cancel</button>
+              <button type="submit" class="btn btn-success " ng-click="postsCTRL.create(); ok(); submitForm(userForm.$valid)" >Save Details </button>
+            </div>
+
+
+            </fieldset>
+
+            </form>
+
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+
+
+</section>
+
+
+

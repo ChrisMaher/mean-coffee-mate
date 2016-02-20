@@ -1,0 +1,243 @@
+<section class="row" ng-controller="ChangeProfilePictureController">
+  <section class="row" ng-controller="SocialAccountsController">
+
+    <div class="col-md-12 change-picture-screen">
+
+      <div class="col-md-3">
+        <form class="signin form-horizontal">
+          <fieldset>
+
+            <div class="text-center">
+            <label class="control-label image-upload-text">Image Upload</label>
+            </div>
+
+            <!-- Image Preview -->
+            <div class="form-group text-center">
+              <img ng-src="{{imageURL}}" alt="{{user.displayName}}" class="img-thumbnail user-profile-picture-edit">
+            </div>
+            <div class="form-group text-center">
+              <img ng-src="{{imageURL}}" alt="{{user.displayName}}" class="img-thumbnail user-profile-picture-circle">
+            </div>
+
+            <div class="manual-image-upload-buttons" ng-show="urlimage === undefined">
+
+            <!-- Upload Image Button -->
+            <div class="text-center form-group" ng-hide="uploader.queue.length || avatarSelected === true">
+          <span class="btn btn-default btn-file">
+              Upload Image <input type="file" nv-file-select uploader="uploader">
+          </span>
+            </div>
+
+             <!-- Upload and Cancel Buttons -->
+            <div class="text-center form-group" ng-show="uploader.queue.length">
+              <button class="btn btn-primary" ng-click="uploadProfilePicture();">Upload</button>
+              <button class="btn btn-default" ng-click="cancelUpload();">Cancel</button>
+            </div>
+
+              <!-- Upload and Cancel Buttons For Avatar Selected-->
+              <div class="text-center form-group" ng-show="avatarSelected === true">
+                <button class="btn btn-primary" ng-click="uploadProfilePictureAvatar();">Choose</button>
+                <button class="btn btn-default" ng-click="changeLocation('settings/picture',false);">Cancel</button>
+              </div>
+
+
+              <!--Error & Success Messages-->
+            <div ng-show="success" class="text-center text-success">
+              <strong>Profile Picture Changed Successfully</strong>
+            </div>
+            <div ng-show="error" class="text-center text-danger">
+              <strong ng-bind="error"></strong>
+            </div>
+
+            </div>
+
+            <!--&lt;!&ndash; Image Preview &ndash;&gt;-->
+            <!--<div class="form-group text-center social-photo">-->
+              <!--&lt;!&ndash; User is connected to FB but no Avatar = Show Random Avatar &ndash;&gt;-->
+
+              <!--&lt;!&ndash; User is connected to FB with Avatar = show FB Avatar &ndash;&gt;-->
+              <!--<img class="img-thumbnail"-->
+                <!--ng-show="user.provider === 'facebook' "-->
+                <!--ng-src="{{user.providerData.picture.data.url}}"-->
+                <!--ng-click="selectAvatar(user.providerData.picture.data.url)"-->
+                <!--alt="{{user.displayName}}'s Facebook Avatar">-->
+
+            <!--</div>-->
+
+            <!--&lt;!&ndash; Image Preview &ndash;&gt;-->
+            <!--<div class="form-group text-center ">-->
+
+              <!--&lt;!&ndash; User is connected to FB with Avatar = show FB Avatar &ndash;&gt;-->
+              <!--<img class="img-thumbnail"-->
+                <!--ng-show="user.provider === 'google' "-->
+                <!--ng-src="{{changedAvatar}}"-->
+                <!--ng-click="selectAvatar(changedAvatar)"-->
+                <!--alt="{{user.displayName}}'s Google Avatar">-->
+
+            <!--</div>-->
+
+
+            <!--&lt;!&ndash; Hide if Image is selected to Upload  &ndash;&gt;-->
+            <!--<div class="manual-upload" ng-hide="uploader.queue.length">-->
+              <!--<div class="add-image-link" ng-hide="success">-->
+              <!--</div>-->
+              <!--<label class="control-label" for="urlimage" ng-hide="uploader.queue.length">IMAGE URL</label>-->
+
+              <!--<div class="controls" ng-hide="uploader.queue.length">-->
+                <!--<input type="url" data-ng-model="urlimage" id="urlimage" class="form-control" placeholder="Image URL" required>-->
+                <!--<div class="sub-label">Manually enter an image URL.</div>-->
+              <!--</div>-->
+
+            <!--</div>-->
+
+
+          </fieldset>
+        </form>
+      </div>
+
+      <div class="col-md-9 avatar-pick">
+
+        <div class="text-center">
+          <label class="control-label">Avatar Gallery</label>
+        </div>
+
+        <div class="row">
+
+
+
+          <div class="col-md-2 avatar-thumb ">
+
+            <img
+                 ng-show="user.provider === 'facebook' "
+                 ng-src="{{user.providerData.picture.data.url}}"
+                 ng-click="selectAvatar(user.providerData.picture.data.url)"
+                 alt="{{user.displayName}}'s Facebook Avatar">
+
+            <img
+                 ng-show="user.provider === 'google' "
+                 ng-src="{{changedAvatar}}"
+                 ng-click="selectAvatar(changedAvatar)"
+                 alt="{{user.displayName}}'s Google Avatar">
+
+            <img ng-show="user.provider === 'local' " ng-src="{{randomAvatar11}}" ng-click="selectAvatar(randomAvatar11)" alt="{{user.displayName}}'s Avatar">
+
+          </div>
+
+          <div class="col-md-2 avatar-thumb ">
+
+            <img ng-src="{{randomAvatar12}}" ng-click="selectAvatar(randomAvatar12)" alt="{{user.displayName}}'s Avatar">
+
+          </div>
+
+          <div class="col-md-2 avatar-thumb ">
+
+            <img ng-src="{{randomAvatar1}}" ng-click="selectAvatar(randomAvatar1)" alt="{{user.displayName}}'s Avatar">
+
+          </div>
+
+          <div class="col-md-2 avatar-thumb">
+
+            <img ng-src="{{randomAvatar2}}" ng-click="selectAvatar(randomAvatar2)" alt="{{user.displayName}}'s Avatar">
+
+          </div>
+
+        </div>
+
+        <div class="row">
+
+          <div class="col-md-2 avatar-thumb ">
+
+            <img ng-src="{{randomAvatar3}}" ng-click="selectAvatar(randomAvatar3)" alt="{{user.displayName}}'s Avatar">
+
+          </div>
+
+          <div class="col-md-2 avatar-thumb">
+
+            <img ng-src="{{randomAvatar4}}" ng-click="selectAvatar(randomAvatar4)" alt="{{user.displayName}}'s Avatar">
+
+          </div>
+
+          <div class="col-md-2 avatar-thumb ">
+
+            <img ng-src="{{randomAvatar5}}" ng-click="selectAvatar(randomAvatar5)" alt="{{user.displayName}}'s Avatar">
+
+          </div>
+
+          <div class="col-md-2 avatar-thumb">
+
+            <img ng-src="{{randomAvatar6}}" ng-click="selectAvatar(randomAvatar6)" alt="{{user.displayName}}'s Avatar">
+
+          </div>
+
+        </div>
+
+        <div class="row">
+
+          <div class="col-md-2 avatar-thumb ">
+
+            <img ng-src="{{randomAvatar7}}" ng-click="selectAvatar(randomAvatar7)" alt="{{user.displayName}}'s Avatar">
+
+          </div>
+
+          <div class="col-md-2 avatar-thumb">
+
+            <img ng-src="{{randomAvatar8}}" ng-click="selectAvatar(randomAvatar8)" alt="{{user.displayName}}'s Avatar">
+
+          </div>
+
+          <div class="col-md-2 avatar-thumb ">
+
+            <img ng-src="{{randomAvatar9}}" ng-click="selectAvatar(randomAvatar9)" alt="{{user.displayName}}'s Avatar">
+
+          </div>
+
+          <div class="col-md-2 avatar-thumb">
+
+            <img ng-src="{{randomAvatar10}}" ng-click="selectAvatar(randomAvatar10)"
+                 alt="{{user.displayName}}'s Avatar">
+
+          </div>
+
+        </div>
+
+        <div class="row">
+
+          <div class="col-md-2 avatar-thumb ">
+
+            <img ng-src="{{randomAvatar13}}" ng-click="selectAvatar(randomAvatar13)" alt="{{user.displayName}}'s Avatar">
+
+          </div>
+
+          <div class="col-md-2 avatar-thumb">
+
+            <img ng-src="{{randomAvatar14}}" ng-click="selectAvatar(randomAvatar14)" alt="{{user.displayName}}'s Avatar">
+
+          </div>
+
+          <div class="col-md-2 avatar-thumb ">
+
+            <img ng-src="{{randomAvatar15}}" ng-click="selectAvatar(randomAvatar15)" alt="{{user.displayName}}'s Avatar">
+
+          </div>
+
+          <div class="col-md-2 avatar-thumb">
+
+            <img ng-src="{{randomAvatar16}}" ng-click="selectAvatar(randomAvatar16)" alt="{{user.displayName}}'s Avatar">
+
+          </div>
+
+        </div>
+
+        <div class="col-md-12 text-center avatar-text avatar-button">
+
+          <md-button ng-click="randomiseAvatars()" type="button" class="randomise-button">Randomise</md-button>
+
+        </div>
+
+
+      </div>
+
+    </div>
+
+  </section>
+</section>

@@ -1,0 +1,64 @@
+<div class="col-sm-12" id="below-navbar">
+
+  <ul class="nav nav-tabs img-rounded" id="hottest-tabs">
+
+    <li role="presentation" class="active" ><a href="#" > Sign Up </a> </li>
+
+  </ul>
+
+</div>
+
+<section ng-controller="AuthenticationController">
+
+  <div class="col-md-12 login-screen">
+
+    <div class="col-md-6">
+
+      <h3 class="col-md-12 text-center login-screen-buffer-top">Join in Seconds through :</h3>
+      <div class=" col-md-12 social-buttons text-center">
+        <a ng-click="callOauthProvider('/api/auth/facebook')" class="btn btn-fb"><i class="fa fa-facebook"></i> Facebook</a>
+        <a ng-click="callOauthProvider('/api/auth/google')" class="btn btn-tw"><i class="fa fa-google"></i> Google</a>
+      </div>
+
+      <div ui-view></div>
+
+    </div>
+    <div class="col-md-6">
+
+      <div class="col-md-12 why-register-text">
+
+        <h3 class="text-center why-register">Why Register?</h3>
+
+        <ul class="why-register-ul">
+          <li>Who doesnt love a cup of Coffee?</li>
+          <li>It will take just a few seconds.</li>
+          <li>All prices in Euro!</li>
+          <li>Coffees Aimed exclusively at the Irish Market</li>
+          <li>Unbiased Coffee Reviews shared by our members.</li>
+          <li>Did i mention the Coffee?</li>
+        </ul>
+
+
+      </div>
+
+
+
+
+    </div>
+  </div>
+
+
+
+
+
+
+  <!--<img ng-click="callOauthProvider('/api/auth/twitter')" ng-src="/modules/users/client/img/buttons/twitter.png">-->
+  <!--<img ng-click="callOauthProvider('/api/auth/linkedin')" ng-src="/modules/users/client/img/buttons/linkedin.png">-->
+  <!--<img ng-click="callOauthProvider('/api/auth/github')" ng-src="/modules/users/client/img/buttons/github.png">-->
+  <!--<img ng-click="callOauthProvider('/api/auth/paypal')"  ng-src="/modules/users/client/img/buttons/paypal.png">-->
+
+
+
+</section>
+
+

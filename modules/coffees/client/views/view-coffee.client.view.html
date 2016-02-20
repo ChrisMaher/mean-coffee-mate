@@ -1,0 +1,572 @@
+
+
+<section data-ng-controller="CoffeesController" data-ng-init="findOne()">
+
+  <section data-ng-controller="PostsController" data-ng-init="find()">
+
+    <div class="row" id="below-navbar">
+
+      <ul class="nav nav-tabs img-rounded" id="hottest-tabs">
+        <li role="presentation" class="active"><a href="#">
+          {{coffee.title}}</a>
+        </li>
+      </ul>
+
+      <ul class="nav nav-tabs submit-tab-view">
+
+        <li ng-show="authentication.user._id == coffee.user._id" role="presentation"><a href="#"
+                                                                                        ng-click="removeCoffee();">Delete</a>
+        </li>
+        <li ng-show="authentication.user._id == coffee.user._id" role="presentation"><a href="#"
+                                                                                        ui-sref="coffees.edit({coffeeId: coffee._id})">Edit</a>
+        </li>
+        <li role="presentation"><a href="/coffees/create" ng-click="setUserImage()"><i
+          class="glyphicon glyphicon-plus-sign"></i> Submit </a></li>
+
+      </ul>
+    </div>
+
+    <div class="row main-body-view">
+
+      <div class="col-lg-9 main-deals-view-coffee">
+
+        <!--Coffees Array Start-->
+
+
+        <div class="list-group-home-single">
+          <div class="row">
+            <div class="col-lg-2 left-box">
+
+              <!--<div class="row deal-votes center-block">-->
+
+              <!--<h1 ng-bind="coffee.votes"></h1>-->
+
+              <!--</div>-->
+
+              <div class="row coffee-link link-button-home">
+
+                <!--<button class="btn btn-default "><i class="glyphicon glyphicon-thumbs-up"></i> Like</button>-->
+
+                <div class="btn-group-vertical hot-cold-buttons" role="group" aria-label="Vertical button group">
+
+                  <!--Logged Out Buttons-->
+
+                  <md-button aria-label="button" ng-hide="authentication.user" ui-sref="authentication.signup" type="button"
+                             class=" vote-up-button"><i class="glyphicon glyphicon-arrow-up"></i></md-button>
+
+                  <md-button aria-label="button" ng-hide="authentication.user" ui-sref="authentication.signup" type="button"
+                             class="vote-down-button"><i class="glyphicon glyphicon-arrow-down  "></i></md-button>
+
+                  <!--Logged In Buttons-->
+
+                  <md-button aria-label="button" type="button"
+                             class=" vote-count-button">{{coffee.votes}}</md-button>
+
+                  <md-button aria-label="button" ng-disabled="disableButtonUp(coffee)" ng-show="authentication.user" ng-click="upVoteHome(coffee); removeVotesDailyCall()" type="button"
+                             class=" vote-up-button"><i class="glyphicon glyphicon-arrow-up"></i></md-button>
+
+                  <md-button aria-label="button" ng-disabled="disableButtonDown(coffee)" ng-show="authentication.user" ng-click="downVoteHome(coffee)" type="button"
+                             class="vote-down-button"><i class="glyphicon glyphicon-arrow-down  "></i></md-button>
+
+
+
+
+
+                </div>
+
+              </div>
+
+
+            </div>
+
+            <div class="col-lg-8" id="single-middle-box">
+
+
+              <div class="col-lg-12 middle-title">
+                <div class="col-lg-8">
+
+                  <h4><b><a ng-href="/coffees/{{coffee._id}}" ng-bind="coffee.title"></a></b>
+                  </h4>
+
+                </div>
+                <div class="col-lg-4">
+
+                  <h4><b>Price:</b> € {{coffee.price}}
+                  </h4>
+
+                </div>
+
+              </div>
+              <div class="col-lg-12">
+                <div class="col-lg-7 middle-title-brand">
+
+                  <h4><a target="_blank" ng-href="{{coffee.retailer}}">{{coffee.brand}}</a></h4>
+
+                </div>
+                <div class="col-lg-5 middle-title-country">
+
+                  <h4><b>Country:</b> {{coffee.country}}
+                  </h4>
+
+                </div>
+
+              </div>
+
+              <div class="col-lg-12 single-middle-product-details">
+                <text-angular ta-toolbar="[[]]" ng-bind-html="coffee.marketingtext"></text-angular>
+              </div>
+
+              <div class="col-lg-12 middle-post-details">
+
+                <div class="col-lg-5 middle-posted-by">
+                  <a ng-href="/users/{{coffee.user._id}}"><img ng-src="{{coffee.user.profileImageURL}}"
+                                                        class="small-profile-image-thumbnail"
+                                                        alt="{{coffee.user._id}}" height="20px"
+                                                        width="20px"/> <span class="username"
+                                                                                 data-ng-bind="coffee.user.username"></span></a>
+                  |
+                  <span am-time-ago="coffee.created"></span>
+                </div>
+
+                <div class="col-lg-7 middle-posted-by ">
+
+                  <div class="col-lg-6 middle-posted-by-icons">
+                    <div fb-like="coffeeUrl(coffee._id)"></div>
+                  </div>
+
+                  <div class="col-lg-3 middle-posted-by-icons">
+                    <div google-plus="coffeeUrl(coffee._id)"></div>
+                  </div>
+
+                  <div class="col-lg-3 middle-posted-by-icons">
+                    <div tweet="coffee.title + ' - CoffeeMe.ie'" tweet-url="coffeeUrl(coffee._id)"></div>
+                  </div>
+
+                </div>
+
+
+                <!--<div class="col-lg-6 middle-time-of-posting">Posted On <span data-ng-bind="coffee.created | date:'mediumDate'"></span></div>-->
+
+              </div>
+
+
+              <!--<small class="list-group-item-text">-->
+              <!--Posted on-->
+              <!--<span data-ng-bind="coffee.created | date:'medium'"></span>-->
+              <!--by-->
+              <!--<span data-ng-bind="coffee.user.username"></span>-->
+              <!--</small>-->
+
+
+            </div>
+
+            <div class="col-lg-2 right-box">
+
+              <div class="row deal-image thumbnail-preview center-block">
+
+                <a ng-href="/coffees/{{coffee._id}}">
+
+                  <img class="home-coffee-image " src="{{coffee.urlimage}}"/>
+
+                </a>
+
+              </div>
+
+              <!--<div class="row center-block save-button">-->
+              <!--<a data-ng-href="/coffees/{{coffee._id}}" >-->
+              <!--<md-button aria-label="button" class="save-button-md">Details</md-button>-->
+              <!--</a>-->
+              <!--</div>-->
+
+
+            </div>
+
+
+          </div>
+
+
+        </div>
+
+        <!-- Comments Section Start -->
+
+        <div class="comments-box-under-deal">
+
+
+          <div class="comment-headers" ng-if="(posts | filter:{ coffeeId: coffee._id}).length > 0">
+
+            <div  ng-if="(posts | filter:{ coffeeId: coffee._id}).length > 2">
+            <h3>Top Reviews</h3>
+            </div>
+
+            <div class="list-group comments-list-top-comment">
+
+              <div  ng-if="(posts | filter:{ coffeeId: coffee._id}).length === 3">
+                <div dir-paginate="post in posts | filter:{ coffeeId: coffee._id}|orderBy : '-votes' | itemsPerPage:1"
+                     class="list-group-item comment-box-single" >
+
+
+                  <div class="row outer-comment-box">
+                    <div class="col-sm-1 comment-box-left">
+
+
+                      <img ng-src="{{post.user.profileImageURL}}" alt="{{post.user._id}}"
+                           class="comment-profile-image"/>
+
+
+                    </div>
+                    <div class="col-sm-10  comment-box-middle">
+
+                      <div class="col-sm-12  comment-box-middle-top">
+
+                        <text-angular ta-toolbar="[[]]" ng-bind-html="post.details"></text-angular>
+
+
+                      </div>
+
+                      <div class="col-sm-5 middle-posted-by">
+
+
+                        <a ng-href="/users/{{post.user._id}}">
+                         <span class="username" data-ng-bind="post.user.username"></span> | <span
+                        am-time-ago="post.created"></span></a>
+
+
+                      </div>
+                      <div class="col-sm-5 comment-box-middle-bottom">
+
+                        <!--<small class="list-group-item-text">-->
+                        <!--Replies : <span>{{post.replies.length}}</span>-->
+                        <!--</small>-->
+
+                      </div>
+
+                      <div class="col-sm-2 comment-box-middle-bottom">
+
+                        <small class="list-group-item-text">
+                    <span><a href="" ng-show="authentication.user" ng-click="voteCommentUp(post)">Vote Up
+                      ({{post.voters.length}})</a></span>
+                        </small>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+
+                </div>
+              </div>
+              <div  ng-if="(posts | filter:{ coffeeId: coffee._id}).length > 3">
+                <div dir-paginate="post in posts | filter:{ coffeeId: coffee._id}|orderBy : '-votes' | itemsPerPage:2"
+                     class="list-group-item comment-box-single" >
+
+
+                  <div class="row outer-comment-box">
+                    <div class="col-sm-1 comment-box-left">
+
+
+                      <img ng-src="{{post.user.profileImageURL}}" alt="{{post.user.username}}"
+                           class="comment-profile-image"/>
+
+
+                    </div>
+                    <div class="col-sm-10  comment-box-middle">
+
+                      <div class="col-sm-12  comment-box-middle-top">
+
+                        <text-angular ta-toolbar="[[]]" ng-bind-html="post.details"></text-angular>
+
+
+                      </div>
+
+                      <div class="col-sm-5 middle-posted-by">
+
+
+                        <a ng-href="/users/{{post.user._id}}">
+                          <span class="username" data-ng-bind="post.user.username"></span> | <span
+                          am-time-ago="post.created"></span></a>
+
+
+                      </div>
+                      <div class="col-sm-5 comment-box-middle-bottom">
+
+                        <!--<small class="list-group-item-text">-->
+                        <!--Replies : <span>{{post.replies.length}}</span>-->
+                        <!--</small>-->
+
+                      </div>
+
+                      <div class="col-sm-2 comment-box-middle-bottom">
+
+                        <small class="list-group-item-text">
+                    <span><a href="" ng-show="authentication.user" ng-click="voteCommentUp(post)">Vote Up
+                      ({{post.voters.length}})</a></span>
+                        </small>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+
+                </div>
+              </div>
+
+
+
+              <div class="comment-headers">
+                <h3>Reviews</h3>
+              </div>
+
+              <div class="list-group comments-list">
+
+                <div dir-paginate="post in posts|filter:{ coffeeId: coffee._id}|itemsPerPage:7"
+                     class="list-group-item comment-box-single">
+
+                  <div class="row outer-comment-box">
+                    <div class="col-sm-1 comment-box-left">
+
+
+                      <img ng-src="{{post.user.profileImageURL}}" alt="{{post.user.username}}"
+                           class="comment-profile-image"/>
+
+
+                    </div>
+                    <div class="col-sm-10  comment-box-middle">
+
+                      <div class="col-sm-12  comment-box-middle-top">
+
+                        <text-angular ta-toolbar="[[]]" ng-bind-html="post.details"></text-angular>
+
+
+                      </div>
+
+                      <div class="col-sm-5 middle-posted-by">
+
+
+                        <a ng-href="/users/{{post.user._id}}">
+                          <span class="username" data-ng-bind="post.user.username"></span></a> | <span
+                          am-time-ago="post.created"></span>
+
+
+                      </div>
+
+                      <div class="col-sm-5 comment-box-middle-bottom">
+
+                        <!--<small class="list-group-item-text">-->
+                        <!--Replies : <span>{{post.replies.length}}</span>-->
+                        <!--</small>-->
+
+                      </div>
+
+                      <div class="col-sm-2 comment-box-middle-bottom">
+
+                        <small class="list-group-item-text">
+                      <span><a href="" ng-show="authentication.user" ng-click="voteCommentUp(post)">Vote Up
+                        ({{post.voters.length}})</a></span>
+                        </small>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+
+                </div>
+
+                <div class="text-center">
+                  <dir-pagination-controls></dir-pagination-controls>
+                </div>
+
+
+                <!--<div class="alert alert-warning text-center" data-ng-hide="!posts.$resolved || posts.length">-->
+                <!--No Comments yet, why don't you write one?-->
+                <!--</div>-->
+
+                <div ng-show="error" class="text-danger">
+                  <strong ng-bind="error"></strong>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <h3 ng-show="authentication.user">New Review</h3>
+
+          <div class="row sign-up-to-comment-box" ng-hide="authentication.user">
+            <div class="col-md-2 center-block sign-in-to-comment">
+              <h3></h3>
+            </div>
+            <div class="col-md-4 center-block sign-in-to-comment">
+              <h3>Sign In to Comment</h3>
+            </div>
+            <div class="col-md-4">
+
+              <section ng-controller="AuthenticationController">
+                <div ng-hide="authentication.user">
+                  <div class="social-buttons">
+                    <a ng-click="callOauthProvider('/api/auth/facebook')" class="btn btn-fb"><i
+                      class="fa fa-facebook"></i> Facebook</a>
+                    <a ng-click="callOauthProvider('/api/auth/google')" class="btn btn-tw"><i
+                      class="fa fa-google"></i> Google</a>
+                  </div>
+                </div>
+
+              </section>
+
+            </div>
+            <div class="col-md-2 center-block sign-in-to-comment">
+              <h3></h3>
+            </div>
+
+
+          </div>
+
+
+          <div class="row comments-section" ng-show="authentication.user">
+            <form class="form-horizontal" novalidate>
+              <fieldset>
+
+
+                <div class="form-group">
+
+                  <!--<label class="control-label" for="details">Comment</label>-->
+                  <!--<div class="controls">-->
+                  <!--<input type="text" data-ng-model="details" id="details" class="form-control"-->
+                  <!--placeholder="Comment" required>-->
+
+                  <!--</div>-->
+
+                  <!--<label class="control-label" for="details">Comment:</label>-->
+
+                  <!--<textarea class="form-control" data-ng-model="details" rows="5" id="details">Comment.....</textarea>-->
+
+                  <text-angular ta-toolbar="[['bold','italics'],['justifyLeft', 'justifyCenter', 'justifyRight'],
+                              ['insertLink']]" id="details" name="details" data-ng-model="details">
+
+                  </text-angular>
+
+                </div>
+
+
+                <div class="col-lg-7" ng-show="authentication.user">
+                  <div class="form-group">
+                    <button class="btn btn-default" type="submit" value="Submit Review" ng-click="create(); reload()">
+                      Submit Comment
+                    </button>
+                  </div>
+
+                </div>
+
+
+              </fieldset>
+            </form>
+          </div>
+
+
+        </div>
+      </div>
+
+      <div class="col-lg-3 right-column-coffee-view">
+
+        <div class="row right-column-view-inner">
+
+          <div class="row right-column-inner-one-view">
+
+
+            <div class="best-box-view">
+
+              <ul class="nav nav-tabs img-rounded best-box-tabs">
+
+                <li role="presentation" class="active"><a href="#"> {{coffee.brand}} </a>
+                </li>
+
+              </ul>
+              <div class="best-box-inner-view">
+
+                <div ng-show="weekly" class="weekly-list">
+
+                  <!--<div ng-repeat="coffee in coffees |  filter: { retailer: 'retailer' } | limitTo:10"-->
+                  <!--class=" timeframe-row">-->
+
+                  <div ng-repeat="coffee in coffees | filter: { retailer: coffee.retailer } | limitTo:10"
+                       class=" timeframe-row">
+
+                    <div class="row timeframe-row-item">
+                      <div class="col-lg-2 timeframe-row-item-0">
+                        <div class="col-lg-12 text-center center-block timeframe-row-item-1">{{coffee.votes}}</div>
+                        <div class="col-lg-12 text-center center-block timeframe-row-item-2">
+
+                          <!--<md-button ng-hide="authentication.user" ui-sref="authentication.signup" type="button"-->
+                          <!--class="vote-up-button-small"><i class="glyphicon glyphicon-arrow-up"></i>-->
+                          <!--</md-button>-->
+
+                          <!--<md-button ng-show="authentication.user" ng-click="upVoteHome(coffee)" type="button"-->
+                          <!--class="vote-up-button-small"><i class="glyphicon glyphicon-arrow-up"></i>-->
+                          <!--</md-button>-->
+
+                          <a ng-href="/users/{{coffee.user._id}}"><img ng-src="{{coffee.user.profileImageURL}}"
+                                                                class="small-profile-image-thumbnail"
+                                                                alt="{{coffee.user.username}}" height="20px"
+                                                                width="20px"/></span></a>
+
+                        </div>
+                      </div>
+                      <div class="col-lg-10 text-center ">
+
+                        <div class="col-lg-12 text-center ">
+                          <b></b><a class="timeframe-row-item-3-text" ng-href="/coffees/{{coffee._id}}">{{coffee.title}}</a></b>
+                        </div>
+                        <div class="col-lg-12 text-center middle-title-brand-weekly-monthly">
+                          <a target="_blank" ng-href="{{coffee.retailer}}">{{coffee.brand}}</a>
+                        </div>
+
+
+                        <!--<a class="timeframe-row-item-3-text" ng-href="/coffees/{{coffee._id}}">{{coffee.title}}(&euro;{{coffee.price.toFixed(2)}}-->
+                        <!--@-->
+                        <!--{{coffee.retailer}}</a>-->
+
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+
+
+              </div>
+            </div>
+
+          </div>
+
+          <!--<div class="row  right-column-inner-two">-->
+
+
+          <!--</div>-->
+
+          <!--<div class="row  right-column-inner-three">-->
+
+
+          <!--</div>-->
+
+        </div>
+
+
+      </div>
+
+    </div>
+  </section>
+</section>
+
+
+
+
+
+
+
+
+

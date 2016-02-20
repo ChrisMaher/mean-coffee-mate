@@ -1,0 +1,219 @@
+<div class="col-sm-12" id="below-navbar">
+
+  <ul class="nav nav-tabs img-rounded" id="hottest-tabs">
+    <li role="presentation" class="active"><a href="/coffees/create"> Edit
+      Coffee </a>
+    </li>
+  </ul>
+
+</div>
+
+<section ng-controller="CoffeesController  as coffeesCTRL" ng-init="findOne()">
+  <div class=" col-sm-12 create-body-coffee">
+    <div class="col-md-12">
+
+      <form name="coffeeForm" class="form-horizontal" novalidate>
+        <fieldset>
+
+          <div class="row body-content">
+            <div class="col-lg-6 create-coffee-left">
+
+              <!-- Title Box Start-->
+
+              <div class="form-group new-deal-form"
+                   ng-class="{ 'has-error' : createCoffeeForm.title.$invalid && submitted}" show-errors>
+                <label for="title">Title</label>
+                <input name="title" type="text" ng-model="coffee.title" id="title" class="form-control"
+                       required>
+                <!--<div class="sub-label">Enter a Title for the Coffee.</div>-->
+                <div ng-messages="coffeeForm.coffeesCTRL.title.$error" role="alert">
+                  <p class="help-block error-text" ng-message="required">Coffee title is required.</p>
+                </div>
+              </div>
+
+              <!-- Title Box End-->
+
+              <!-- Brand Box Start-->
+
+              <div class="form-group new-deal-form"
+                   ng-class="{ 'has-error' : createCoffeeForm.brand.$invalid && submitted}" show-errors>
+                <label for="brand">Brand</label>
+                <input name="brand" type="text" ng-model="coffee.brand" id="brand" class="form-control"
+                       required>
+                <!--<div class="sub-label">Enter a Brand for the Coffee.</div>-->
+                <div ng-messages="coffeeForm.coffeesCTRL.brand.$error" role="alert">
+                  <p class="help-block error-text" ng-message="required">Coffee brand is required.</p>
+                </div>
+              </div>
+
+              <!-- Brand Box End-->
+
+              <!-- Country Box Start-->
+
+              <div class="form-group new-deal-form"
+                   ng-class="{ 'has-error' : createCoffeeForm.country.$invalid && submitted}" show-errors>
+                <label for="country">Country</label>
+                <input name="country" type="text" ng-model="coffee.country" id="country" class="form-control"
+                       required>
+                <!--<div class="sub-label">Enter a country for the Coffee.</div>-->
+                <div ng-messages="coffeeForm.coffeesCTRL.country.$error" role="alert">
+                  <p class="help-block error-text" ng-message="required">Coffee country is required.</p>
+                </div>
+              </div>
+
+              <!-- Country Box End-->
+
+              <!-- Marketing Text Box Start-->
+
+              <label for="marketingtext">Marketing Text</label>
+              <div class="form-group new-deal-form">
+
+                <text-angular
+                  ta-toolbar="[['bold','italics', 'underline', 'strikeThrough'],['justifyLeft', 'justifyCenter', 'justifyRight'], ['insertLink', 'undo'],['charcount']]"
+                  id="marketingtext" name="marketingtext" data-ng-model="coffee.marketingtext">
+                </text-angular>
+
+                <!--<div class="sub-label">Enter the marketing text for the Coffee.</div>-->
+
+              </div>
+
+
+              <!-- Marketing Text Box End-->
+
+
+            </div>
+            <div class="col-lg-6 create-coffee-right">
+
+              <!-- Price Box Start-->
+
+              <div class="row price-row">
+
+                <div class="col-lg-6 price-box-euro">
+
+                  <div class="form-group new-deal-form"
+                       ng-class="{ 'has-error' : createCoffeeForm.price.$invalid && submitted}" show-errors>
+                    <label for="currency">Currency</label>
+                    <select  name="currency" ng-model="coffee.currency" class="form-control" id="currency" required>
+                      <option >Euro (€)</option>
+                      <option >Sterling (£)</option>
+                    </select>
+                  </div>
+
+                </div>
+
+                <div class="col-lg-6 price-box-euro">
+                  <div class="form-group new-deal-form"
+                       ng-class="{ 'has-error' : createCoffeeForm.price.$invalid && submitted}" show-errors>
+                    <label for="price">Price</label>
+                    <!--<div class="input-group">-->
+                    <!--<div class="input-group-addon">&euro;-->
+                    <!--</div>-->
+                    <input name="price" ng-disabled="!disablelist" type="number" ng-model="coffee.price" id="price"
+                           class="form-control" required>
+                    <!--</div>-->
+                    <!--<div class="sub-label">Enter either the &euro; price</div>-->
+                    <div ng-messages="coffeeForm.coffeesCTRL.price.$error" role="alert">
+                      <p class="help-block error-text" ng-message="required">Price is required.</p>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Price Box End-->
+
+              <!-- Retailer Box Start-->
+
+              <div class="form-group new-deal-form"
+                   ng-class="{ 'has-error' : createCoffeeForm.retailer.$invalid && submitted}" show-errors>
+                <label for="retailer">Retailer Website</label>
+                <input name="retailer" type="url" ng-model="coffee.retailer" id="retailer" class="form-control" required>
+                <!--<div class="sub-label">Enter the Retailer of the Coffee.</div>-->
+                <div ng-messages="coffeeForm.coffeesCTRL.retailer.$error" role="alert">
+                  <p class="help-block error-text" ng-message="required">Retailer website is required.</p>
+                </div>
+              </div>
+
+              <!-- Retailer Box End-->
+
+              <!-- uploadImage Box Start-->
+
+              <div class="col-md-12 create-deal-image-upload-coffee new-deal-form">
+
+                <div class="col-md-7 create-deal-image-detais">
+
+                  <div class="manual-upload" ng-show="coffee.urlimage.length === undefined">
+                    <label class="control-label" for="urlimage">IMAGE UPLOAD</label>
+
+                    <div class="text-center form-group controls" ng-hide="uploaderProductCoffee.queue.length">
+                            <span class="btn btn-default btn-file">
+                                Select Image <input type="file" nv-file-select uploader="uploaderProductCoffee">
+                            </span>
+                    </div>
+
+                    <div class="sub-label"> Upload an image of product.</div>
+                    </br>
+
+                    <div class="text-center form-group-saving" ng-show="uploaderProductCoffee.queue.length">
+
+                      <button class="btn btn-primary" ng-click="uploadProductPictureCoffee();">Upload</button>
+                      <button class="btn btn-default" ng-click="cancelProductUploadCoffee();">Delete</button>
+
+                    </div>
+
+                    <div ng-show="success" class="text-center text-success">
+
+                      <strong>Upload Successful</strong>
+                    </div>
+
+                    <!--<div ng-show="error" class="text-center text-danger">-->
+                    <!--<strong ng-bind="error"></strong>-->
+                    <!--</div>-->
+
+                  </div>
+
+                  <div class="add-image-link" ng-hide="success">
+
+                    <label class="control-label" for="urlimage" ng-hide="uploaderProductCoffee.queue.length">IMAGE
+                      URL</label>
+
+                    <div class="controls" ng-hide="uploaderProductCoffee.queue.length">
+                      <input type="url" data-ng-model="coffee.urlimage" id="urlimage" class="form-control"
+                             placeholder="Image URL" required>
+                      <div class="sub-label">Manually enter an image URL.</div>
+
+                    </div>
+                  </div>
+
+                </div>
+
+
+                <div class="col-md-5 create-deal-image-preview"></br></br>
+                  <img src="{{coffee.urlimage}}" class="img-thumbnail product-upload-picture">
+                </div>
+              </div>
+
+              <!-- uploadImage Box Start-->
+
+
+
+            <div class="form-group buttons-cancel-submit text-center">
+              <button class="btn btn-default " ng-click="cancel()">Cancel</button>
+              <button type="submit" class="btn btn-success " ng-click="updateCoffee(); submitFormCoffee(createCoffeeForm.$valid)" >Save Details </button>
+
+            </div>
+
+            <div ng-show="error" class="text-danger text-center buttons-cancel-submit">
+              <strong ng-bind="error"></strong>
+            </div>
+
+
+          </div>
+
+        </fieldset>
+      </form>
+
+
+    </div>
+  </div>
+</section>
