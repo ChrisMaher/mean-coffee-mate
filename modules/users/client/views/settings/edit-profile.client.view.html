@@ -25,7 +25,7 @@
           <div class="form-group" show-errors>
             <label for="email">Email</label>
             <input type="email" id="email" name="email" class="form-control" ng-model="user.email" placeholder="Email"
-                   lowercase required>
+                   lowercase required disabled>
             <div ng-messages="userForm.email.$error" role="alert">
               <p class="help-block error-text" ng-message="required">Email address is required.</p>
               <p class="help-block error-text" ng-message="email">Email address is invalid.</p>
