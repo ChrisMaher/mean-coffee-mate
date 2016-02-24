@@ -25,8 +25,8 @@ module.exports = {
     title: defaultEnvConfig.app.title + ' - The Coffee Review Website.'
   },
   facebook: {
-    clientID: process.env.FACEBOOK_ID || '1685832878317344',
-    clientSecret: process.env.FACEBOOK_SECRET || 'bbaa360a1160fc66bb8314e3b91bedf9',
+    clientID: process.env.FACEBOOK_ID || '440185716180800',
+    clientSecret: process.env.FACEBOOK_SECRET || '751caec168104845b4d456155d70bf04',
     callbackURL: '/api/auth/facebook/callback'
   },
   twitter: {
