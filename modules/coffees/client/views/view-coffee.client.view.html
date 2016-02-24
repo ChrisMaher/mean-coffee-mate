@@ -49,6 +49,9 @@
 
                 <div class="btn-group-vertical hot-cold-buttons" role="group" aria-label="Vertical button group">
 
+                  <md-button aria-label="button" type="button"
+                             class=" vote-count-button">{{coffee.votes}}</md-button>
+
                   <!--Logged Out Buttons-->
 
                   <md-button aria-label="button" ng-hide="authentication.user" ui-sref="authentication.signup" type="button"
@@ -59,8 +62,7 @@
 
                   <!--Logged In Buttons-->
 
-                  <md-button aria-label="button" type="button"
-                             class=" vote-count-button">{{coffee.votes}}</md-button>
+
 
                   <md-button aria-label="button" ng-disabled="disableButtonUp(coffee)" ng-show="authentication.user" ng-click="upVoteHome(coffee); removeVotesDailyCall()" type="button"
                              class=" vote-up-button"><i class="glyphicon glyphicon-arrow-up"></i></md-button>
@@ -402,7 +404,7 @@
               <h3></h3>
             </div>
             <div class="col-md-4 center-block sign-in-to-comment">
-              <h3>Sign In to Comment</h3>
+              <h3>Sign In to Review</h3>
             </div>
             <div class="col-md-4">
 
