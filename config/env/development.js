@@ -22,7 +22,7 @@ module.exports = {
     }
   },
   app: {
-    title: defaultEnvConfig.app.title + ' - The Irish Savings Site.'
+    title: defaultEnvConfig.app.title + ' - The Coffee Review Website.'
   },
   facebook: {
     clientID: process.env.FACEBOOK_ID || '1685832878317344',
@@ -35,8 +35,8 @@ module.exports = {
     callbackURL: '/api/auth/twitter/callback'
   },
   google: {
-    clientID: process.env.GOOGLE_ID || '291598201748-l0gl3nnqv0meloe3rko0lhbf81a7410m.apps.googleusercontent.com',
-    clientSecret: process.env.GOOGLE_SECRET || 'nyPwNoqPHQnZmXRGyix5wBAd',
+    clientID: process.env.GOOGLE_ID || '408070110880-m0tfeom6ta9uc88rckud5oafju2mfvrj.apps.googleusercontent.com',
+    clientSecret: process.env.GOOGLE_SECRET || 'Dc81MEQQfhsK5SjthD2yPY8W',
     callbackURL: '/api/auth/google/callback'
   },
   linkedin: {
