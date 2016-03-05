@@ -16,6 +16,11 @@ module.exports = function (app) {
         .get(coffees.list)
         .post(coffees.create);
 
+    // Coffees collection routes
+    app.route('/app/coffees').all(coffeesPolicy.isAllowed)
+        .get(coffees.list);
+
+
     // Single coffee routes
     app.route('/api/coffees/:coffeeId').all(coffeesPolicy.isAllowed)
         .get(coffees.read)

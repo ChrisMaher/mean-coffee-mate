@@ -30,22 +30,16 @@
 
       <div class="col-lg-9 main-deals-view-coffee">
 
-        <!--Coffees Array Start-->
 
 
         <div class="list-group-home-single">
           <div class="row">
             <div class="col-lg-2 left-box">
 
-              <!--<div class="row deal-votes center-block">-->
 
-              <!--<h1 ng-bind="coffee.votes"></h1>-->
-
-              <!--</div>-->
 
               <div class="row coffee-link link-button-home">
 
-                <!--<button class="btn btn-default "><i class="glyphicon glyphicon-thumbs-up"></i> Like</button>-->
 
                 <div class="btn-group-vertical hot-cold-buttons" role="group" aria-label="Vertical button group">
 
@@ -147,17 +141,10 @@
                 </div>
 
 
-                <!--<div class="col-lg-6 middle-time-of-posting">Posted On <span data-ng-bind="coffee.created | date:'mediumDate'"></span></div>-->
-
               </div>
 
 
-              <!--<small class="list-group-item-text">-->
-              <!--Posted on-->
-              <!--<span data-ng-bind="coffee.created | date:'medium'"></span>-->
-              <!--by-->
-              <!--<span data-ng-bind="coffee.user.username"></span>-->
-              <!--</small>-->
+
 
 
             </div>
@@ -174,11 +161,7 @@
 
               </div>
 
-              <!--<div class="row center-block save-button">-->
-              <!--<a data-ng-href="/coffees/{{coffee._id}}" >-->
-              <!--<md-button aria-label="button" class="save-button-md">Details</md-button>-->
-              <!--</a>-->
-              <!--</div>-->
+
 
 
             </div>
@@ -236,9 +219,7 @@
                       </div>
                       <div class="col-sm-5 comment-box-middle-bottom">
 
-                        <!--<small class="list-group-item-text">-->
-                        <!--Replies : <span>{{post.replies.length}}</span>-->
-                        <!--</small>-->
+
 
                       </div>
 
@@ -292,9 +273,7 @@
                       </div>
                       <div class="col-sm-5 comment-box-middle-bottom">
 
-                        <!--<small class="list-group-item-text">-->
-                        <!--Replies : <span>{{post.replies.length}}</span>-->
-                        <!--</small>-->
+
 
                       </div>
 
@@ -356,9 +335,7 @@
 
                       <div class="col-sm-5 comment-box-middle-bottom">
 
-                        <!--<small class="list-group-item-text">-->
-                        <!--Replies : <span>{{post.replies.length}}</span>-->
-                        <!--</small>-->
+
 
                       </div>
 
@@ -383,9 +360,7 @@
                 </div>
 
 
-                <!--<div class="alert alert-warning text-center" data-ng-hide="!posts.$resolved || posts.length">-->
-                <!--No Comments yet, why don't you write one?-->
-                <!--</div>-->
+
 
                 <div ng-show="error" class="text-danger">
                   <strong ng-bind="error"></strong>
@@ -436,16 +411,7 @@
 
                 <div class="form-group">
 
-                  <!--<label class="control-label" for="details">Comment</label>-->
-                  <!--<div class="controls">-->
-                  <!--<input type="text" data-ng-model="details" id="details" class="form-control"-->
-                  <!--placeholder="Comment" required>-->
 
-                  <!--</div>-->
-
-                  <!--<label class="control-label" for="details">Comment:</label>-->
-
-                  <!--<textarea class="form-control" data-ng-model="details" rows="5" id="details">Comment.....</textarea>-->
 
                   <text-angular ta-toolbar="[['bold','italics'],['justifyLeft', 'justifyCenter', 'justifyRight'],
                               ['insertLink']]" id="details" name="details" data-ng-model="details">
@@ -503,13 +469,7 @@
                         <div class="col-lg-12 text-center center-block timeframe-row-item-1">{{coffee.votes}}</div>
                         <div class="col-lg-12 text-center center-block timeframe-row-item-2">
 
-                          <!--<md-button ng-hide="authentication.user" ui-sref="authentication.signup" type="button"-->
-                          <!--class="vote-up-button-small"><i class="glyphicon glyphicon-arrow-up"></i>-->
-                          <!--</md-button>-->
 
-                          <!--<md-button ng-show="authentication.user" ng-click="upVoteHome(coffee)" type="button"-->
-                          <!--class="vote-up-button-small"><i class="glyphicon glyphicon-arrow-up"></i>-->
-                          <!--</md-button>-->
 
                           <a ng-href="/users/{{coffee.user._id}}"><img ng-src="{{coffee.user.profileImageURL}}"
                                                                 class="small-profile-image-thumbnail"
@@ -528,9 +488,6 @@
                         </div>
 
 
-                        <!--<a class="timeframe-row-item-3-text" ng-href="/coffees/{{coffee._id}}">{{coffee.title}}(&euro;{{coffee.price.toFixed(2)}}-->
-                        <!--@-->
-                        <!--{{coffee.retailer}}</a>-->
 
                       </div>
                     </div>
@@ -545,15 +502,7 @@
 
           </div>
 
-          <!--<div class="row  right-column-inner-two">-->
 
-
-          <!--</div>-->
-
-          <!--<div class="row  right-column-inner-three">-->
-
-
-          <!--</div>-->
 
         </div>
 
