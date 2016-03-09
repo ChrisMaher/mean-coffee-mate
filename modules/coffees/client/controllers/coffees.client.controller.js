@@ -26,10 +26,10 @@ angular.module('coffees').controller('CoffeesController', ['$scope', '$http', '$
         $scope.yesterdaysDate = $scope.yesterdaysDate.getMonth() + 1 + '/' + $scope.yesterdaysDate.getDate() + '/' + $scope.yesterdaysDate.getFullYear() + "";
         // alert($scope.yesterdaysDate);
 
-        $scope.coffeeUrl = function (coffee) {
+        $scope.coffeeUrl1 = function (coffee) {
 
-            $scope.coffeeLink = 'http://saveme.ie/coffees/' + coffee;
-            // console.log($scope.coffeeLink);
+            $scope.coffeeLink = 'http://coffeemate.club';
+            console.log(coffee);
             return $scope.coffeeLink;
 
         };
