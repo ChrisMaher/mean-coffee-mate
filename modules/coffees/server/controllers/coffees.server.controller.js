@@ -264,6 +264,56 @@ exports.appUpvoteCoffee = function (req, res, next) {
 
 };
 
+// /**
+//  * App Upvote a saving.
+//  */
+// exports.appUpvoteSaving = function (req, res) {
+//
+//     var saving = req.saving;
+//
+//     saving = _.extend(saving, req.body);
+//
+//     var hasVoted = saving.upVoters.filter(function (voter) {
+//
+//             return voter === req.params.email;
+//
+//         }).length > 0;
+//
+//     if(!hasVoted){
+//
+//         saving.votes++;
+//         saving.votesreal++;
+//         saving.upVoters.push(req.params.email);
+//
+//     }
+//
+//     var hasVoted3 = saving.downVoters.filter(function (voter) {
+//
+//             return voter === req.params.email;
+//
+//         }).length > 0;
+//
+//     if (hasVoted3) {
+//
+//         for (var i = saving.downVoters.length - 1; i >= 0; i--) {
+//
+//             if (saving.downVoters[i] === req.params.email) {
+//                 saving.downVoters.splice(i, 1);
+//             }
+//         }
+//     }
+//
+//     saving.save(function (err) {
+//         if (err) {
+//             return res.status(400).send({
+//                 message: errorHandler.getErrorMessage(err)
+//             });
+//         } else {
+//             res.json(saving);
+//         }
+//     });
+// };
+
 
 exports.listOf = function(req, res) {
 
