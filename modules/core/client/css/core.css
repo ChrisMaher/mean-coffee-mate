@@ -525,6 +525,27 @@ body {
 
 }
 
+.single-middle-product-details > textarea{
+
+    border: none;
+    height: 300px;
+
+
+
+
+
+}
+
+.single-middle-product-details > textarea:focus{
+
+    border: none;
+    height: 540px;
+    outline: none !important;
+
+
+
+}
+
 .ad-image{
     padding-left: 5px;
 
