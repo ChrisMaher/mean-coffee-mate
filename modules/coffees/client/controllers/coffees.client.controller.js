@@ -443,35 +443,47 @@ angular.module('coffees').controller('CoffeesController', ['$scope', '$http', '$
 
         $scope.disableButtonUp = function (coffee) {
 
-            var hasVotedUp = coffee.upVoters.filter(function (voter) {
+            if(coffee !== undefined){
 
-                    return voter === $scope.user.email;
+                var hasVotedUp = coffee.upVoters.filter(function (voter) {
 
-                }).length > 0;
+                        return voter === $scope.user.email;
 
-            if (hasVotedUp) {
-                return true;
+                    }).length > 0;
 
-            } else {
-                return false;
+                if (hasVotedUp) {
+                    return true;
+
+                } else {
+                    return false;
+                }
+
             }
+
+
 
         };
 
         $scope.disableButtonDown = function (coffee) {
 
-            var hasVotedUp = coffee.downVoters.filter(function (voter) {
+            if(coffee !== undefined){
 
-                    return voter === $scope.user.email;
+                var hasVotedUp = coffee.downVoters.filter(function (voter) {
 
-                }).length > 0;
+                        return voter === $scope.user.email;
 
-            if (hasVotedUp) {
-                return true;
+                    }).length > 0;
 
-            } else {
-                return false;
+                if (hasVotedUp) {
+                    return true;
+
+                } else {
+                    return false;
+                }
+
             }
+
+
 
         };
 
