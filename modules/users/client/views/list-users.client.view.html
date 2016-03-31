@@ -1,0 +1,112 @@
+<section data-ng-controller="UserListController">
+  <div class="row" id="below-navbar">
+
+    <ul class="nav nav-tabs img-rounded" id="hottest-tabs">
+      <li role="presentation" class="active"><a href="#">
+        Users</a>
+      </li>
+      <li role="presentation " class="active"><a href="#" ng-click="toggleSearch();"><span class="glyphicon glyphicon-search"></span></a>
+      </li>
+      <li  ng-show="searchTab" role="presentation" class="active">
+        <input class="form-control col-md-4" type="text" ng-model="search" placeholder="Search"
+               ng-change="figureOutItemsToDisplay()"/>
+      </li>
+    </ul>
+
+  </div>
+
+
+  <div class="row main-body-admin-users">
+
+    <div class="row">
+
+      <div class="text-center">
+        <dir-pagination-controls></dir-pagination-controls>
+      </div>
+
+      <div class="col-md-4">
+        <div class="list-group">
+          <a dir-paginate="user in pagedItems| orderBy : '-roles'  | itemsPerPage:10" href="/users/{{user._id}}" class="list-group-item admin-item">
+
+
+            <div class="row">
+
+              <div class="col-md-3">
+
+                <img ng-src="{{user.profileImageURL}}"
+                     class="small-profile-image-thumbnail-admin"
+                     alt="{{user.username}}" height="100px"
+                     width="100px"/>
+
+              </div>
+              <div class="col-md-9">
+                <div class="row"><b>{{user.username}}</b></div>
+                <div class="row">Joined : <span am-time-ago="user.created"></span></div>
+              </div>
+
+            </div>
+
+
+
+
+          </a>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="list-group">
+          <a dir-paginate="user in pagedItems| orderBy : 'created'  | itemsPerPage:10"
+             ui-sref="admin.user({userId: user._id})" class="list-group-item admin-item">
+
+            <div class="row">
+
+              <div class="col-md-3">
+
+                <img ng-src="{{user.profileImageURL}}"
+                     class="small-profile-image-thumbnail-admin"
+                     alt="{{user.username}}" height="100px"
+                     width="100px"/>
+
+              </div>
+              <div class="col-md-9">
+                <div class="row"><b>{{user.username}}</b></div>
+                <div class="row">Joined : <span am-time-ago="user.created"></span></div>
+              </div>
+
+            </div>
+
+          </a>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="list-group">
+          <a dir-paginate="user in pagedItems| orderBy : 'username'  | itemsPerPage:10"
+             ui-sref="admin.user({userId: user._id})" class="list-group-item admin-item">
+
+            <div class="row">
+
+              <div class="col-md-3">
+
+                <img ng-src="{{user.profileImageURL}}"
+                     class="small-profile-image-thumbnail-admin"
+                     alt="{{user.username}}" height="100px"
+                     width="100px"/>
+
+              </div>
+              <div class="col-md-9">
+                <div class="row"><b>{{user.username}}</b></div>
+                <div class="row">Joined : <span am-time-ago="user.created"></span></div>
+              </div>
+
+            </div>
+
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+</section>

@@ -68,6 +68,10 @@ angular.module('users').config(['$stateProvider',
             url: '/users/:userId',
             templateUrl: 'modules/users/client/views/view-profile.client.view.html'
                })
+            .state('members', {
+                url: '/members',
+                templateUrl: 'modules/users/client/views/list-users.client.view.html'
+            })
             .state('password.reset.form', {
                 url: '/:token',
                 templateUrl: 'modules/users/client/views/password/reset-password.client.view.html'

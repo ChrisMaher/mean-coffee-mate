@@ -509,6 +509,40 @@ body {
 
 }
 
+.main-body-admin-users {
+
+    /*min-height: 700px;*/
+    margin: 0px;
+    border: #dddddd 1px solid;
+    border-radius: 10px;
+    background-color: #FFFFFF;
+    padding: 15px;
+    height: 900px;
+
+}
+
+.small-profile-image-thumbnail-admin {
+
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    margin: 0px auto;
+    /*margin-left: 10px;*/
+
+}
+
+.admin-item {
+
+    margin-bottom: 10px;
+
+}
+
+.members-navbar-link{
+
+    margin-right: -30px !important;
+
+}
+
 .right-column-inner-two {
 
     border: 1px solid #DDDDDD;

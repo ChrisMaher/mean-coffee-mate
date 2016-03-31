@@ -7,6 +7,18 @@ angular.module('users.admin').controller('UserListController', ['$scope', '$filt
       $scope.buildPager();
     });
 
+    $scope.searchTab = false;
+
+    $scope.toggleSearch = function(){
+
+      if($scope.searchTab === true){
+        $scope.searchTab = false;
+      }else if($scope.searchTab === false){
+        $scope.searchTab = true;
+      }
+
+    };
+
     $scope.buildPager = function () {
       $scope.pagedItems = [];
       $scope.itemsPerPage = 15;
