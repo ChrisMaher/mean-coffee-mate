@@ -243,76 +243,109 @@ exports.removeVotesDaily = function (req, res) {
 
 };
 
-// Upvote a Coffee
-exports.appUpvoteCoffee = function (req, res, next) {
+/**
+ * App Downvote a coffee.
+ */
+exports.appDownvoteCoffee = function (req, res) {
 
-    Coffee.find({
+    var coffee = req.coffee;
 
-        _id: req.params.appCoffeeId
+    coffee = _.extend(coffee, req.body);
 
-    }).populate('user').exec(function (err, coffee) {
-        if (err) {
-            return next(err);
-        } else if (!coffee) {
-            return res.status(404).send({
-                message: 'No coffee with that identifier has been found'
-            });
+    var hasVoted4 = coffee.downVoters.filter(function (voter) {
+
+            return voter === req.params.email1;
+
+        }).length > 0;
+
+    if(!hasVoted4){
+
+        coffee.votes--;
+        coffee.votesreal--;
+        coffee.downVoters.push(req.params.email1);
+
+    }
+
+    var hasVoted3 = coffee.upVoters.filter(function (voter) {
+
+            return voter === req.params.email1;
+
+        }).length > 0;
+
+    if (hasVoted3) {
+
+        for (var i = coffee.upVoters.length - 1; i >= 0; i--) {
+
+            if (coffee.upVoters[i] === req.params.email1) {
+                coffee.upVoters.splice(i, 1);
+            }
         }
-        req.coffee = coffee;
-        next();
-    });
+    }
 
+
+
+    coffee.save(function (err) {
+        if (err) {
+            return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+
+            });
+
+        } else {
+            res.json(coffee);
+        }
+    });
 };
 
-// /**
-//  * App Upvote a saving.
-//  */
-// exports.appUpvoteSaving = function (req, res) {
-//
-//     var saving = req.saving;
-//
-//     saving = _.extend(saving, req.body);
-//
-//     var hasVoted = saving.upVoters.filter(function (voter) {
-//
-//             return voter === req.params.email;
-//
-//         }).length > 0;
-//
-//     if(!hasVoted){
-//
-//         saving.votes++;
-//         saving.votesreal++;
-//         saving.upVoters.push(req.params.email);
-//
-//     }
-//
-//     var hasVoted3 = saving.downVoters.filter(function (voter) {
-//
-//             return voter === req.params.email;
-//
-//         }).length > 0;
-//
-//     if (hasVoted3) {
-//
-//         for (var i = saving.downVoters.length - 1; i >= 0; i--) {
-//
-//             if (saving.downVoters[i] === req.params.email) {
-//                 saving.downVoters.splice(i, 1);
-//             }
-//         }
-//     }
-//
-//     saving.save(function (err) {
-//         if (err) {
-//             return res.status(400).send({
-//                 message: errorHandler.getErrorMessage(err)
-//             });
-//         } else {
-//             res.json(saving);
-//         }
-//     });
-// };
+/**
+ * App Upvote a coffee.
+ */
+exports.appUpvoteCoffee = function (req, res) {
+
+    var coffee = req.coffee;
+
+    coffee = _.extend(coffee, req.body);
+
+    var hasVoted = coffee.upVoters.filter(function (voter) {
+
+            return voter === req.params.email;
+
+        }).length > 0;
+
+    if(!hasVoted){
+
+        coffee.votes++;
+        coffee.votesreal++;
+        coffee.upVoters.push(req.params.email);
+
+    }
+
+    var hasVoted3 = coffee.downVoters.filter(function (voter) {
+
+            return voter === req.params.email;
+
+        }).length > 0;
+
+    if (hasVoted3) {
+
+        for (var i = coffee.downVoters.length - 1; i >= 0; i--) {
+
+            if (coffee.downVoters[i] === req.params.email) {
+                coffee.downVoters.splice(i, 1);
+            }
+        }
+    }
+
+    coffee.save(function (err) {
+        if (err) {
+            return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+            });
+        } else {
+            res.json(coffee);
+        }
+    });
+};
 
 
 exports.listOf = function(req, res) {

@@ -68,6 +68,7 @@ angular.module('users').config(['$stateProvider',
             url: '/users/:userId',
             templateUrl: 'modules/users/client/views/view-profile.client.view.html'
                })
+            
             .state('members', {
                 url: '/members',
                 templateUrl: 'modules/users/client/views/list-users.client.view.html'

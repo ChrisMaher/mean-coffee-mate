@@ -27,12 +27,15 @@ module.exports = function (app) {
         .put(coffees.update)
         .delete(coffees.delete);
 
-    // Single coffee routes
-    app.route('/api/coffees/app/:appCoffeeId/:userEmail').all()
-        .post(coffees.appUpvoteCoffee);
+    // Single saving routes
+    app.route('/api/coffees/app/downvote/:coffeeId/:email1')
+        .put(coffees.appDownvoteCoffee)
+        .get(coffees.read);
 
-    app.route('/coffees/coffeeCount').all()
-        .get(coffees.countCoffees);
+    // Single saving routes
+    app.route('/api/coffees/app/upvote/:coffeeId/:email')
+        .put(coffees.appUpvoteCoffee)
+        .get(coffees.read);
 
     app.route('/coffees/coffeeCountToday').all()
         .get(coffees.countCoffeesToday);
@@ -62,5 +65,7 @@ module.exports = function (app) {
     app.param('userIdString', coffees.usersUpvotesTotal);
     app.param('appCoffeeId', coffees.appUpvoteCoffee);
     app.param('userEmail', coffees.appUpvoteCoffee);
+    app.param('email', coffees.appUpvoteCoffee);
+    app.param('email1', coffees.appDownvoteCoffee);
 
 };
