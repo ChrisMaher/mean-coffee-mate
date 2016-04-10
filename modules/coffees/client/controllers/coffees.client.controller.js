@@ -42,18 +42,7 @@ angular.module('coffees').controller('CoffeesController', ['$scope', '$http', '$
 
         };
 
-        $scope.showAModal = function() {
-
-            // Just provide a template url, a controller and call 'showModal'.
-            ModalService.showModal({
-                template: "<div>Fry lives in {{futurama.city}}</div>",
-                controller: function() {
-                    this.city = "New New York";
-                },
-                controllerAs : "futurama"
-            });
-
-        };
+        
 
         Coffees.query({}, function (resp) {
             //console.log(resp);
