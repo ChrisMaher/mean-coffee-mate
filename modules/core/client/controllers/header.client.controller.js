@@ -4,6 +4,7 @@ angular.module('core').controller('HeaderController', ['$scope', '$location', '$
   function ($scope, $location, $state, Authentication, Menus) {
 
     var isMobile = {
+
       Android: function() {
         return navigator.userAgent.match(/Android/i);
       },
@@ -25,19 +26,17 @@ angular.module('core').controller('HeaderController', ['$scope', '$location', '$
 
     };
 
-    $scope.isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-
 
     if ( isMobile.Android() ) {
       document.location.href = "https://play.google.com/store/apps/details?id=coffeemate.chris.app.coffeemateclub";
     }
     else if(isMobile.iOS())
     {
-      document.location.href = "http://www.saveme.ie/apple";
+      document.location.href = "https://itunes.apple.com/us/app/coffeemate.club/id1101814054?ls=1&mt=8";
     }
     else if(isMobile.BlackBerry())
     {
-      document.location.href = "http://www.saveme.ie/android";
+      document.location.href = "https://www.microsoft.com/en-gb/store/apps/coffeemate/9nblggh4m5b1";
     }else if(isMobile.Windows())
     {
       document.location.href = "https://www.microsoft.com/en-gb/store/apps/coffeemate/9nblggh4m5b1";
