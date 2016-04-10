@@ -22,6 +22,7 @@ module.exports = {
                 'public/lib/angular-ui-utils/ui-utils.min.js',
                 'public/lib/angular-file-upload/angular-file-upload.min.js',
                 'public/lib/angular-utils-pagination/dirPagination.js',
+                'public/lib/angular-modal-service/dst/angular-modal-service.min.js',
 
                 'public/lib/angular-bootstrap/ui-bootstrap-tpls.min.js',
                 'public/lib/textAngular/dist/textAngular-rangy.min.js',

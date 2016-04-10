@@ -1,8 +1,8 @@
 'use strict';
 
 // Coffees controller
-angular.module('coffees').controller('CoffeesController', ['$scope', '$http', '$timeout', '$stateParams', '$location', '$window', '$state', 'Authentication', 'Coffees', 'FileUploader', 'Posts', 'Users',
-    function ($scope, $http, $timeout, $stateParams, $location, $window, $state, Authentication, Coffees, FileUploader, Posts, Users) {
+angular.module('coffees').controller('CoffeesController', ['$scope', '$http', '$timeout', '$stateParams', '$location', '$window', '$state', 'Authentication', 'Coffees', 'FileUploader', 'Posts', 'Users', 'ModalService',
+    function ($scope, $http, $timeout, $stateParams, $location, $window, $state, Authentication, Coffees, FileUploader, Posts, Users, ModalService) {
 
         $scope.authentication = Authentication;
         $scope.user = Authentication.user;
@@ -31,6 +31,27 @@ angular.module('coffees').controller('CoffeesController', ['$scope', '$http', '$
             $scope.coffeeLink = 'http://coffeemate.club';
             console.log(coffee);
             return $scope.coffeeLink;
+
+        };
+        
+        $scope.countryOfOrigin = function(country){
+            
+         var countryLink = "http://www.google.ie/search?q=" + country;
+
+            return countryLink;
+
+        };
+
+        $scope.showAModal = function() {
+
+            // Just provide a template url, a controller and call 'showModal'.
+            ModalService.showModal({
+                template: "<div>Fry lives in {{futurama.city}}</div>",
+                controller: function() {
+                    this.city = "New New York";
+                },
+                controllerAs : "futurama"
+            });
 
         };
 
