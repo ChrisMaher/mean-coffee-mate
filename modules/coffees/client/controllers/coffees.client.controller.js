@@ -1,8 +1,8 @@
 'use strict';
 
 // Coffees controller
-angular.module('coffees').controller('CoffeesController', ['$scope', '$http', '$timeout', '$stateParams', '$location', '$window', '$state', 'Authentication', 'Coffees', 'FileUploader', 'Posts', 'Users', 'ModalService',
-    function ($scope, $http, $timeout, $stateParams, $location, $window, $state, Authentication, Coffees, FileUploader, Posts, Users, ModalService) {
+angular.module('coffees').controller('CoffeesController', ['$scope', '$http', '$timeout', '$stateParams', '$location', '$window', '$state', 'Authentication', 'Coffees', 'FileUploader', 'Posts', 'Users',
+    function ($scope, $http, $timeout, $stateParams, $location, $window, $state, Authentication, Coffees, FileUploader, Posts, Users) {
 
         $scope.authentication = Authentication;
         $scope.user = Authentication.user;
