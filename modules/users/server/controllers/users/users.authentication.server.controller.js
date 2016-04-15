@@ -120,7 +120,7 @@ exports.oauthCallback = function (strategy) {
         }
 
         // return res.redirect(redirectURL || sessionRedirectURL || '/');
-        return res.redirect('http://www.coffeemate.club');
+        return res.redirect('http://coffeemate.club');
       });
     })(req, res, next);
   };
