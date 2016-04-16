@@ -2096,6 +2096,33 @@ body {
     background-color: rgba(230, 230, 229, 0.96);
 }
 
+.vote-up-button-view {
+    color: white !important;
+    background-color: rgb(140, 102, 46) !important;
+    /*border-radius: 10px ;*/
+    font-size: 16px;
+    width: 100%;
+}
+
+.vote-up-button-view:not([disabled]):hover {
+    background-color: rgb(164, 122, 51) !important;
+    color: white;
+    width: 100%;
+}
+
+.vote-up-button-view:not([disabled]):active {
+    background-color: rgb(164, 122, 51) !important;
+    color: white;
+    width: 100%;
+}
+
+.vote-up-button-view[disabled] {
+    color: white;
+    background-color: rgba(230, 230, 229, 0.96);
+    width: 100%;
+}
+
+
 .vote-up-button-small {
     color: white;
     background-color: rgb(161, 28, 0);

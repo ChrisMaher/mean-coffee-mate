@@ -163,6 +163,19 @@
 
               </div>
 
+              </br></br>
+
+              <div class="row center-block save-button-view">
+                <a data-ng-href="/coffees/{{coffee._id}}">
+                  <md-button aria-label="button" ng-show="authentication.user" href="{{coffee.link}}" target="_blank"
+                             class="vote-up-button-view  center-block">View
+                  </md-button>
+                  <md-button aria-label="button" ng-hide="authentication.user" ui-sref="authentication.signup"
+                             type="button" class="vote-up-button-view  center-block">View
+                  </md-button>
+                </a>
+              </div>
+
 
 
 

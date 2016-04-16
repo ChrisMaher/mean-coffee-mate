@@ -4,7 +4,7 @@
 var ApplicationConfiguration = (function () {
   // Init module configuration options
   var applicationModuleName = 'mean';
-  var applicationModuleVendorDependencies = ['ngResource', 'ngAnimate', 'ngMessages', 'ui.router', 'ui.bootstrap', 'ui.utils', 'angularFileUpload','ngRoute', 'angularUtils.directives.dirPagination', 'textAngular','colorpicker.module', 'wysiwyg.module'];
+  var applicationModuleVendorDependencies = ['ngResource', 'ngAnimate', 'ngMessages', 'ui.router', 'ui.bootstrap', 'ui.utils', 'angularFileUpload', 'angularUtils.directives.dirPagination', 'textAngular','colorpicker.module', 'wysiwyg.module','ngMaterial', 'angularMoment','angulike'];
 
   // Add a new vertical module
   var registerModule = function (moduleName, dependencies) {
@@ -98,12 +98,7 @@ angular.element(document).ready(function () {
 'use strict';
 
 // Use Applicaion configuration module to register a new module
-ApplicationConfiguration.registerModule('articles');
-
-'use strict';
-
-// Use Applicaion configuration module to register a new module
-ApplicationConfiguration.registerModule('chat');
+ApplicationConfiguration.registerModule('coffees');
 
 'use strict';
 
@@ -115,7 +110,7 @@ ApplicationConfiguration.registerModule('core.admin.routes', ['ui.router']);
 'use strict';
 
 // Use Applicaion configuration module to register a new module
-ApplicationConfiguration.registerModule('deals');
+ApplicationConfiguration.registerModule('posts');
 
 'use strict';
 
@@ -126,27 +121,27 @@ ApplicationConfiguration.registerModule('users.admin.routes', ['core.admin.route
 
 'use strict';
 
-// Configuring the Articles module
-angular.module('articles').run(['Menus',
+// Configuring the Coffees module
+angular.module('coffees').run(['Menus',
   function (Menus) {
-    // Add the articles dropdown item
+    // Add the coffees dropdown item
     Menus.addMenuItem('topbar', {
-      title: 'Articles',
-      state: 'articles',
+      title: 'Coffees',
+      state: 'coffees',
       type: 'dropdown',
       roles: ['*']
     });
 
     // Add the dropdown list item
-    Menus.addSubMenuItem('topbar', 'articles', {
-      title: 'List Articles',
-      state: 'articles.list'
+    Menus.addSubMenuItem('topbar', 'coffees', {
+      title: 'List Coffees',
+      state: 'coffees.list'
     });
 
     // Add the dropdown create item
-    Menus.addSubMenuItem('topbar', 'articles', {
-      title: 'Create Articles',
-      state: 'articles.create',
+    Menus.addSubMenuItem('topbar', 'coffees', {
+      title: 'Create Coffees',
+      state: 'coffees.create',
       roles: ['user']
     });
   }
@@ -155,33 +150,33 @@ angular.module('articles').run(['Menus',
 'use strict';
 
 // Setting up route
-angular.module('articles').config(['$stateProvider',
+angular.module('coffees').config(['$stateProvider',
   function ($stateProvider) {
-    // Articles state routing
+    // Coffees state routing
     $stateProvider
-      .state('articles', {
+      .state('coffees', {
         abstract: true,
-        url: '/articles',
+        url: '/coffees',
         template: '<ui-view/>'
       })
-      .state('articles.list', {
-        url: '',
-        templateUrl: 'modules/articles/client/views/list-articles.client.view.html'
-      })
-      .state('articles.create', {
+      // .state('coffees.list', {
+      //   url: '',
+      //   templateUrl: 'modules/coffees/client/views/list-coffees.client.view.html'
+      // })
+      .state('coffees.create', {
         url: '/create',
-        templateUrl: 'modules/articles/client/views/create-article.client.view.html',
+        templateUrl: 'modules/coffees/client/views/create-coffee.client.view.html',
         data: {
           roles: ['user', 'admin']
         }
       })
-      .state('articles.view', {
-        url: '/:articleId',
-        templateUrl: 'modules/articles/client/views/view-article.client.view.html'
+      .state('coffees.view', {
+        url: '/:coffeeId',
+        templateUrl: 'modules/coffees/client/views/view-coffee.client.view.html'
       })
-      .state('articles.edit', {
-        url: '/:articleId/edit',
-        templateUrl: 'modules/articles/client/views/edit-article.client.view.html',
+      .state('coffees.edit', {
+        url: '/:coffeeId/edit',
+        templateUrl: 'modules/coffees/client/views/edit-coffee.client.view.html',
         data: {
           roles: ['user', 'admin']
         }
@@ -191,173 +186,568 @@ angular.module('articles').config(['$stateProvider',
 
 'use strict';
 
-// Articles controller
-angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Articles',
-  function ($scope, $stateParams, $location, Authentication, Articles) {
-    $scope.authentication = Authentication;
+// Coffees controller
+angular.module('coffees').controller('CoffeesController', ['$scope', '$http', '$timeout', '$stateParams', '$location', '$window', '$state', 'Authentication', 'Coffees', 'FileUploader', 'Posts', 'Users',
+    function ($scope, $http, $timeout, $stateParams, $location, $window, $state, Authentication, Coffees, FileUploader, Posts, Users) {
 
-    // Create new Article
-    $scope.create = function (isValid) {
-      $scope.error = null;
+        $scope.authentication = Authentication;
+        $scope.user = Authentication.user;
+        //$scope.orderByField = 'votesreal';
+        $scope.coffeeImageURL = '/modules/users/client/img/profile/saveme-placeholder.png';
+        // $scope.user.imageURL  = '/modules/users/client/img/profile/saveme-placeholder.png';
+        $scope.imageURL1 = '';
+        $scope.hottestsorted = true;
+        $scope.newestsorted = true;
+        $scope.weekly = false;
+        $scope.monthly = true;
+        $scope.disablelist = true;
+        $scope.usernamevalue = $stateParams.userId;
+        $scope.currency = "Euro (€)";
+        $scope.filterUserId = '';
+        $scope.brandLogo = '/modules/users/client/img/profile/argos-logo.png';
+        $scope.isDisabledUp = false;
+        $scope.isDisabledDown = false;
+        $scope.yesterdaysDate = new Date();
+        $scope.yesterdaysDate.setDate($scope.yesterdaysDate.getDate() - 1);
+        $scope.yesterdaysDate = $scope.yesterdaysDate.getMonth() + 1 + '/' + $scope.yesterdaysDate.getDate() + '/' + $scope.yesterdaysDate.getFullYear() + "";
+        // alert($scope.yesterdaysDate);
 
-      if (!isValid) {
-        $scope.$broadcast('show-errors-check-validity', 'articleForm');
+        $scope.coffeeUrl1 = function (coffee) {
 
-        return false;
-      }
+            $scope.coffeeLink = 'http://coffeemate.club';
+            console.log(coffee);
+            return $scope.coffeeLink;
 
-      // Create new Article object
-      var article = new Articles({
-        title: this.title,
-        content: this.content
-      });
+        };
+        
+        $scope.countryOfOrigin = function(country){
+            
+         var countryLink = "http://www.google.ie/search?q=" + country;
 
-      // Redirect after save
-      article.$save(function (response) {
-        $location.path('articles/' + response._id);
+            return countryLink;
 
-        // Clear form fields
-        $scope.title = '';
-        $scope.content = '';
-      }, function (errorResponse) {
-        $scope.error = errorResponse.data.message;
-      });
-    };
+        };
 
-    // Remove existing Article
-    $scope.remove = function (article) {
-      if (article) {
-        article.$remove();
+        
 
-        for (var i in $scope.articles) {
-          if ($scope.articles[i] === article) {
-            $scope.articles.splice(i, 1);
-          }
-        }
-      } else {
-        $scope.article.$remove(function () {
-          $location.path('articles');
+        Coffees.query({}, function (resp) {
+            //console.log(resp);
+            $scope.coffees = resp;
         });
-      }
-    };
 
-    // Update existing Article
-    $scope.update = function (isValid) {
-      $scope.error = null;
+        //$scope.user.imageURL = '';
+        $scope.submitFormCoffee = function (isValid) {
+            $scope.submitted = true;
+        };
 
-      if (!isValid) {
-        $scope.$broadcast('show-errors-check-validity', 'articleForm');
+        $scope.hottest = function () {
 
-        return false;
-      }
+            //alert(123);
 
-      var article = $scope.article;
+            if ($scope.hottestsorted === false) {
+                $scope.hottestsorted = true;
+            } else {
+                $scope.hottestsorted = false;
+            }
 
-      article.$update(function () {
-        $location.path('articles/' + article._id);
-      }, function (errorResponse) {
-        $scope.error = errorResponse.data.message;
-      });
-    };
+        };
 
-    // Find a list of Articles
-    $scope.find = function () {
-      $scope.articles = Articles.query();
-    };
+        $scope.setSort = function (sort) {
 
-    // Find existing Article
-    $scope.findOne = function () {
-      $scope.article = Articles.get({
-        articleId: $stateParams.articleId
-      });
-    };
-  }
+            //alert(sort);
+
+            $scope.orderByField = sort;
+
+        };
+
+        $scope.timeFrame = function (classNum) {
+
+            if (classNum === 1) {
+                $scope.weekly = true;
+                $scope.monthly = false;
+            } else if (classNum === 2) {
+                $scope.weekly = false;
+                $scope.monthly = true;
+            }
+
+        };
+
+        $scope.toggleTop = function () {
+
+            //alert("Top");
+
+            if ($scope.top6 === false) {
+                $scope.top6 = true;
+            } else {
+                $scope.top6 = false;
+            }
+
+        };
+
+        $scope.setUserImage = function () {
+
+            $scope.user.imageURL = '/modules/users/client/img/profile/saveme-placeholder.png';
+
+
+        };
+
+        // Create file uploader instance
+        $scope.uploaderProductCoffee = new FileUploader({
+            url: 'api/coffees/picture'
+        });
+
+        // Set file uploader image filter
+        $scope.uploaderProductCoffee.filters.push({
+            name: 'imageFilter',
+            fn: function (item, options) {
+                var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+                return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+            }
+        });
+
+        // Change product profile picture
+        $scope.uploadProductPictureCoffee = function () {
+
+            // Clear messages
+            $scope.success = $scope.error = null;
+
+            // Start upload
+            $scope.uploaderProductCoffee.uploadAll();
+
+
+        };
+
+        $scope.$watch('urlimage', function (newVal, oldVal) {
+
+            if (newVal !== undefined) {
+                $scope.coffeeImageURL = newVal;
+
+            } else {
+
+                $scope.coffeeImageURL = '/modules/users/client/img/profile/saveme-placeholder.png';
+            }
+
+        });
+
+        $scope.$watch('pricesterling', function (newVal, oldVal) {
+
+            if (newVal !== undefined) {
+                $scope.price = (newVal / 70) * 100;
+
+            }
+
+        });
+
+
+        // Called after the user selected a new picture file
+        $scope.uploaderProductCoffee.onAfterAddingFile = function (fileItem) {
+
+            if ($window.FileReader) {
+
+                var fileReader = new FileReader();
+                fileReader.readAsDataURL(fileItem._file);
+                fileReader.onload = function (fileReaderEvent) {
+                    $timeout(function () {
+
+                        $scope.coffeeImageURL = fileReaderEvent.target.result;
+
+                    }, 0);
+                };
+            }
+
+        };
+
+        // Called after the user has successfully uploaded a new picture
+        $scope.uploaderProductCoffee.onSuccessItem = function (fileItem, response, status, headers) {
+
+            // Show success message
+            $scope.success = true;
+
+            // Populate user object
+            $scope.user = Authentication.user = response;
+
+            //// Clear upload buttons
+            $scope.cancelProductUploadCoffee();
+
+        };
+
+        // Called after the user has failed to uploaded a new picture
+        $scope.uploaderProductCoffee.onErrorItem = function (fileItem, response, status, headers) {
+
+            //alert("Failed." + $scope.user.imageURL);
+
+            // Clear upload buttons
+            $scope.cancelProductUploadCoffee();
+
+            // Show error message
+            $scope.error = response.message;
+        };
+
+        // Cancel the upload process
+        $scope.cancelProductUploadCoffee = function () {
+
+            $scope.uploaderProductCoffee.clearQueue();
+            $scope.coffeeImageURL = $scope.user.imageURL;
+
+        };
+
+        // Create new Coffee
+        $scope.create = function () {
+            $scope.error = null;
+
+            var image = '/modules/users/client/img/profile/saveme-placeholder.png';
+            if ($scope.user.imageURL === '/modules/users/client/img/profile/saveme-placeholder.png') {
+                //alert("equal")
+                image = $scope.coffeeImageURL;
+            } else {
+                //alert("not equal")
+                image = $scope.user.imageURL;
+                //alert("image " + image)
+            }
+
+
+            if (this.currency === 'Sterling (£)') {
+
+                this.price = Math.round(((this.price / 70) * 100) * 100) / 100;
+                this.currency = 'Euro (€)';
+
+            }
+
+            var priceRounded = Math.round(this.price * 100) / 100;
+
+            // Create new Coffee object
+            var coffee = new Coffees({
+
+                title: this.title,
+                brand: this.brand,
+                marketingtext: this.marketingtext,
+                price: priceRounded,
+                retailer: this.retailer,
+                brandlogo: image,
+                urlimage: image,
+                country: this.country,
+                roast: this.roast,
+                aroma: this.aroma,
+                body: this.body,
+                flavour: this.flavour,
+                upVoters: $scope.user.email,
+                userIdString : $scope.user._id
+
+
+            });
+
+            // Redirect after save
+            coffee.$save(function (response) {
+
+                //alert("1 " + $scope.user.imageURL);
+                $scope.user.imageURL = '/modules/users/client/img/profile/saveme-placeholder.png';
+                //alert("2 " + $scope.user.imageURL);
+                $location.path('coffees/' + response._id);
+
+                // Clear form fields
+
+                $scope.title = '';
+                $scope.brand = '';
+                $scope.marketingtext = '';
+                $scope.price = '';
+                $scope.retailer = '';
+                $scope.brandlogo = '';
+                $scope.urlimage = '';
+                $scope.country = '';
+                $scope.roast = '';
+                $scope.aroma = '';
+                $scope.body = '';
+                $scope.flavour = '';
+
+
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+        // Remove existing Coffee
+        $scope.removeCoffee = function (coffee) {
+
+            var result = confirm("Are you sure you want to delete?");
+            if (result) {
+
+                // Delete the item
+
+                if (coffee) {
+                    coffee.$remove();
+
+                    for (var i in $scope.coffees) {
+                        if ($scope.coffees[i] === coffee) {
+                            $scope.coffees.splice(i, 1);
+                        }
+                    }
+                } else {
+                    $scope.coffee.$remove(function () {
+                        $location.path('/');
+                    });
+                }
+            }
+
+        };
+
+        // Update existing Coffee
+        $scope.updateCoffee = function () {
+
+            var coffee = $scope.coffee;
+
+            //alert($scope.coffee.currency);
+
+            //if($scope.coffee.currency === 'Sterling (£)'){
+            //
+            //    $scope.coffee.price = Math.round((($scope.coffee.price/70)*100) * 100) / 100 ;
+            //    $scope.coffee.currency = 'Euro (&euro;)';
+            //    alert($scope.coffee.currency);
+            //
+            //}
+
+            if ($scope.coffee.currency === 'Sterling (£)') {
+
+                $scope.coffee.price = Math.round((($scope.coffee.price / 70) * 100) * 100) / 100;
+                $scope.coffee.currency = 'Euro (€)';
+
+
+            }
+
+
+            //alert($scope.coffee.currency);
+
+            coffee.$update(function () {
+                $location.path('coffees/' + coffee._id);
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+
+        };
+
+        // Find a list of Coffees
+        $scope.find = function () {
+            $scope.coffees = Coffees.query();
+        };
+
+        // Find existing Coffee
+        $scope.findOne = function () {
+            $scope.coffee = Coffees.get({
+                coffeeId: $stateParams.coffeeId
+            });
+        };
+
+        // Upvote if user hasnt upvoted already
+
+        $scope.upVoteHome = function (coffee) {
+
+
+            // Check if they have voted with filter
+            var hasVoted = coffee.upVoters.filter(function (voter) {
+
+                    return voter === $scope.user.email;
+
+                }).length > 0;
+
+            // If a downvote exists remove it , else do nothing
+
+            if (!hasVoted) {
+
+                coffee.votes++;
+                coffee.votesreal++;
+                coffee.upVoters.push($scope.user.email);
+
+            }
+
+            // Check if there is a downVote to remove
+
+
+            var hasVoted3 = coffee.downVoters.filter(function (voter) {
+
+                    return voter === $scope.user.email;
+
+                }).length > 0;
+
+            if (hasVoted3) {
+
+                for (var i = coffee.downVoters.length - 1; i >= 0; i--) {
+
+                    if (coffee.downVoters[i] === $scope.user.email) {
+                        coffee.downVoters.splice(i, 1);
+                    }
+                }
+            }
+
+
+            coffee.$update(function () {
+                //$location.path('coffees/' + coffee._id);
+            }, function (errorResponse) {
+                // rollback votes on fail also
+                $scope.error = errorResponse.data.message;
+            });
+
+        };
+
+        $scope.downVoteHome = function (coffee) {
+
+            var hasVoted = coffee.downVoters.filter(function (voter) {
+
+                    return voter === $scope.user.email;
+
+                }).length > 0;
+
+            // If a upvote exists remove it , else do nothing
+
+            if (!hasVoted) {
+
+                coffee.votes--;
+                coffee.votesreal--;
+                coffee.downVoters.push($scope.user.email);
+
+
+            }
+
+            // Check if there is a upVote to remove
+
+
+            var hasVoted2 = coffee.upVoters.filter(function (voter) {
+
+                    return voter === $scope.user.email;
+
+                }).length > 0;
+
+            if (hasVoted2) {
+
+
+                for (var i = coffee.upVoters.length - 1; i >= 0; i--) {
+
+                    if (coffee.upVoters[i] === $scope.user.email) {
+                        coffee.upVoters.splice(i, 1);
+                    }
+                }
+            }
+
+
+            coffee.$update(function () {
+                //$location.path('coffees/' + coffee._id);
+
+            }, function (errorResponse) {
+                // rollback votes on fail also
+                $scope.error = errorResponse.data.message;
+            });
+
+        };
+
+        $scope.disableButtonUp = function (coffee) {
+
+            if(coffee !== undefined){
+
+                var hasVotedUp = coffee.upVoters.filter(function (voter) {
+
+                        return voter === $scope.user.email;
+
+                    }).length > 0;
+
+                if (hasVotedUp) {
+                    return true;
+
+                } else {
+                    return false;
+                }
+
+            }
+
+
+
+        };
+
+        $scope.disableButtonDown = function (coffee) {
+
+            if(coffee !== undefined){
+
+                var hasVotedUp = coffee.downVoters.filter(function (voter) {
+
+                        return voter === $scope.user.email;
+
+                    }).length > 0;
+
+                if (hasVotedUp) {
+                    return true;
+
+                } else {
+                    return false;
+                }
+
+            }
+
+
+
+        };
+
+
+    }
 ]);
+
+angular.module('coffees').filter('lessThan', function () {
+    return function (items, requirement) {
+        var filterKey = Object.keys(requirement)[0];
+        var filterVal = requirement[filterKey];
+
+        var filtered = [];
+
+        if (filterVal !== undefined && filterVal !== '') {
+            angular.forEach(items, function (item) {
+                var today = new Date();
+                var date = new Date(item.created);
+                var diff = today - date;
+                diff = diff / (1000 * 60 * 60);
+
+                if (diff < filterVal) {
+                    filtered.push(item);
+                }
+            });
+            return filtered;
+        }
+
+        return items;
+    };
+});
 
 'use strict';
 
-//Articles service used for communicating with the articles REST endpoints
-angular.module('articles').factory('Articles', ['$resource',
+//Coffees service used for communicating with the coffees REST endpoints
+angular.module('coffees').factory('Coffees', ['$resource',
   function ($resource) {
-    return $resource('api/articles/:articleId', {
-      articleId: '@_id'
+    return $resource('api/coffees/:coffeeId', {
+      coffeeId: '@_id'
     }, {
       update: {
         method: 'PUT'
+      },
+      countCoffees: {
+        method: 'GET',
+        url: '/coffees/coffeeCount',
+        isArray: false
+      },
+      countCoffeesToday: {
+        method: 'GET',
+        url: '/coffees/coffeeCountToday',
+        isArray: false
+      },
+      listOf: {
+        method: 'GET',
+        url: '/api/coffees/of/:userid',
+        isArray: true
+      },
+      usersCoffeesPostedTotal: {
+        method: 'GET',
+        url: '/coffees/usersCoffeesPostedTotal/:userIdString',
+        isArray: true
+      },
+      removeVotesDaily: {
+        method: 'GET',
+        url: '/coffees/removeVotesDaily',
+        isArray: true
       }
-    });
-  }
-]);
-
-'use strict';
-
-// Configuring the Chat module
-angular.module('chat').run(['Menus',
-  function (Menus) {
-    // Set top bar menu items
-    Menus.addMenuItem('topbar', {
-      title: 'Chat',
-      state: 'chat'
-    });
-  }
-]);
-
-'use strict';
-
-// Configure the 'chat' module routes
-angular.module('chat').config(['$stateProvider',
-  function ($stateProvider) {
-    $stateProvider
-      .state('chat', {
-        url: '/chat',
-        templateUrl: 'modules/chat/client/views/chat.client.view.html',
-        data: {
-          roles: ['user', 'admin']
-        }
-      });
-  }
-]);
-
-'use strict';
-
-// Create the 'chat' controller
-angular.module('chat').controller('ChatController', ['$scope', '$location', 'Authentication', 'Socket',
-  function ($scope, $location, Authentication, Socket) {
-    // Create a messages array
-    $scope.messages = [];
-
-    // If user is not signed in then redirect back home
-    if (!Authentication.user) {
-      $location.path('/');
-    }
-
-    // Make sure the Socket is connected
-    if (!Socket.socket) {
-      Socket.connect();
-    }
-
-    // Add an event listener to the 'chatMessage' event
-    Socket.on('chatMessage', function (message) {
-      $scope.messages.unshift(message);
-    });
-
-    // Create a controller method for sending messages
-    $scope.sendMessage = function () {
-      // Create a new message object
-      var message = {
-        text: this.messageText
-      };
-
-      // Emit a 'chatMessage' message event
-      Socket.emit('chatMessage', message);
-
-      // Clear the message text
-      this.messageText = '';
-    };
-
-    // Remove the event listener when the controller instance is destroyed
-    $scope.$on('$destroy', function () {
-      Socket.removeListener('chatMessage');
     });
   }
 ]);
@@ -427,7 +817,8 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
     })
     .state('forbidden', {
       url: '/forbidden',
-      templateUrl: 'modules/core/client/views/403.client.view.html',
+      // templateUrl: 'modules/core/client/views/403.client.view.html',
+      templateUrl: 'modules/core/client/views/authentication/signin.client.view.html',
       data: {
         ignoreState: true
       }
@@ -437,8 +828,49 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
 
 'use strict';
 
-angular.module('core').controller('HeaderController', ['$scope', '$state', 'Authentication', 'Menus',
-  function ($scope, $state, Authentication, Menus) {
+angular.module('core').controller('HeaderController', ['$scope', '$location', '$state', 'Authentication', 'Menus',
+  function ($scope, $location, $state, Authentication, Menus) {
+
+    var isMobile = {
+
+      Android: function() {
+        return navigator.userAgent.match(/Android/i);
+      },
+      BlackBerry: function() {
+        return navigator.userAgent.match(/BlackBerry/i);
+      },
+      iOS: function() {
+        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+      },
+      Opera: function() {
+        return navigator.userAgent.match(/Opera Mini/i);
+      },
+      Windows: function() {
+        return navigator.userAgent.match(/IEMobile/i);
+      },
+      any: function() {
+        return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+      }
+
+    };
+
+
+    if ( isMobile.Android() ) {
+      document.location.href = "https://play.google.com/store/apps/details?id=coffeemate.chris.app.coffeemateclub";
+    }
+    else if(isMobile.iOS())
+    {
+      document.location.href = "https://itunes.apple.com/us/app/coffeemate.club/id1101814054?ls=1&mt=8";
+    }
+    else if(isMobile.BlackBerry())
+    {
+      document.location.href = "https://www.microsoft.com/en-gb/store/apps/coffeemate/9nblggh4m5b1";
+    }else if(isMobile.Windows())
+    {
+      document.location.href = "https://www.microsoft.com/en-gb/store/apps/coffeemate/9nblggh4m5b1";
+    }
+
+
     // Expose view variables
     $scope.$state = $state;
     $scope.authentication = Authentication;
@@ -456,29 +888,216 @@ angular.module('core').controller('HeaderController', ['$scope', '$state', 'Auth
     $scope.$on('$stateChangeSuccess', function () {
       $scope.isCollapsed = false;
     });
+
+    //be sure to inject $scope and $location
+    $scope.changeLocation = function(url, forceReload) {
+      $scope = $scope || angular.element(document).scope();
+      if(forceReload || $scope.$$phase) {
+        window.location = url;
+      }
+      else {
+        //only use this if you want to replace the history stack
+        //$location.path(url).replace();
+
+        //this this if you want to change the URL and add it to the history stack
+        $location.path(url);
+        $scope.$apply();
+      }
+    };
   }
 ]);
 
 'use strict';
 
 
-angular.module('core').controller('HomeController', ['$scope', 'Authentication', 'Deals', 'Users',
-  function ($scope, Authentication, Deals, Users) {
-    // This provides Authentication context.
-    $scope.authentication = Authentication;
+angular.module('core').controller('HomeController', ['$scope', '$location', 'Authentication', 'Coffees', 'Users', 'Posts',
+    function ($scope, $location, Authentication, Coffees, Users, Posts) {
 
-    $scope.numOfDeals = Deals.countDeals();
-    $scope.numOfDealsToday = Deals.countDealsToday();
 
-      $scope.numOfUsers = Users.countUsers();
-      $scope.numOfUsersToday = Users.countUsersToday();
+        // This provides Authentication context.
+        $scope.authentication = Authentication;
+        $scope.user = Authentication.user;
 
-      $scope.numOfPosts = Posts.countPosts();
-      $scope.numOfPostsToday = Posts.countPostsToday();
+        $scope.orderByField = 'votesreal';
+        $scope.orderByFieldCoupon = 'votes';
 
-  }
+        $scope.numOfCoffees = Coffees.countCoffees();
+        $scope.numOfCoffeesToday = Coffees.countCoffeesToday();
+
+        $scope.numOfUsers = Users.countUsers();
+        $scope.numOfUsersToday = Users.countUsersToday();
+
+        $scope.numOfPosts = Posts.countPosts();
+        $scope.numOfPostsToday = Posts.countPostsToday();
+
+        $scope.selectedLogo = 'All';
+        $scope.activeClass = 2;
+
+        $scope.hottestsorted = true;
+        $scope.newestsorted = false;
+
+        $scope.hottestsortedCoupon = true;
+        $scope.newestsortedCoupon = false;
+
+
+
+
+
+
+        $scope.top6 = true;
+
+        $scope.brandLogo = '/modules/users/client/img/profile/all-logo.png';
+
+        $scope.setUserImage = function () {
+            $scope.user.imageURL = '/modules/users/client/img/profile/saveme-placeholder.png';
+        };
+
+        $scope.toggleClass = function (classNum) {
+
+            if(classNum === 1){
+                $scope.hottestsorted = true;
+                $scope.newestsorted = false;
+                $scope.orderByField = 'votesreal';
+            }else if(classNum === 2){
+                $scope.hottestsorted = false;
+                $scope.newestsorted = true;
+                $scope.orderByField = 'created';
+            }
+
+        };
+
+        //be sure to inject $scope and $location
+        $scope.changeLocation = function(url, forceReload) {
+            $scope = $scope || angular.element(document).scope();
+            if(forceReload || $scope.$$phase) {
+                window.location = url;
+            }
+            else {
+                //only use this if you want to replace the history stack
+                //$location.path(url).replace();
+
+                //this this if you want to change the URL and add it to the history stack
+                $location.path(url);
+                $scope.$apply();
+            }
+        };
+
+        $scope.toggleClassCoupon = function (classNum) {
+
+
+            if(classNum === 1){
+                $scope.hottestsortedCoupon = true;
+                $scope.newestsortedCoupon = false;
+                $scope.orderByFieldCoupon = 'votes';
+
+            }else if(classNum === 2){
+                $scope.hottestsortedCoupon = false;
+                $scope.newestsortedCoupon = true;
+                $scope.orderByFieldCoupon = 'created';
+
+            }
+
+        };
+
+        $scope.toggleTop = function () {
+
+            if($scope.top6 === false){
+                $scope.top6 = true;
+            }else{
+                $scope.top6 = false;
+            }
+
+        };
+
+        $scope.setFilterText = function (name) {
+
+            $scope.selectedLogo = name;
+
+        };
+
+        $scope.setLogo = function (name) {
+
+            if(name === 'All'){
+                $scope.brandLogo = name;
+            }else if(name === 'Littlewoods'){
+                $scope.brandLogo = '/modules/users/client/img/profile/littlewoods-logo.png';
+            }else if(name === 'Argos'){
+                $scope.brandLogo = '/modules/users/client/img/profile/argos-logo.png';
+            }else if(name === 'Screwfix'){
+                $scope.brandLogo = '/modules/users/client/img/profile/screwfix-logo.png';
+            }else if(name === 'Amazon'){
+                $scope.brandLogo = '/modules/users/client/img/profile/amazon-logo.png';
+            }else if(name === 'Penneys'){
+                $scope.brandLogo = '/modules/users/client/img/profile/penneys-logo.png';
+            }else if(name === 'Tesco'){
+                $scope.brandLogo = '/modules/users/client/img/profile/tesco-logo.png';
+            }else if(name === 'Lidl'){
+                $scope.brandLogo = '/modules/users/client/img/profile/lidl-logo.png';
+            }else if(name === 'Aldi'){
+                $scope.brandLogo = '/modules/users/client/img/profile/aldi-logo.png';
+            }else {
+                $scope.brandLogo = '/modules/users/client/img/profile/all-logo.png';
+            }
+
+
+
+        };
+
+        $scope.openModal = function (name) {
+
+
+
+        };
+
+
+    }
 ]);
 
+
+/**
+ * Created by Chris on 10/04/2016.
+ */
+
+"use strict";
+
+var isMobile = {
+
+    Android: function() {
+        return navigator.userAgent.match(/Android/i);
+    },
+    BlackBerry: function() {
+        return navigator.userAgent.match(/BlackBerry/i);
+    },
+    iOS: function() {
+        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+    },
+    Opera: function() {
+        return navigator.userAgent.match(/Opera Mini/i);
+    },
+    Windows: function() {
+        return navigator.userAgent.match(/IEMobile/i);
+    },
+    any: function() {
+        return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+    }
+
+};
+
+
+if ( isMobile.Android() ) {
+    document.location.href = "https://play.google.com/store/apps/details?id=coffeemate.chris.app.coffeemateclub";
+}
+else if(isMobile.iOS())
+{
+    document.location.href = "https://itunes.apple.com/us/app/coffeemate.club/id1101814054?ls=1&mt=8";
+}
+else if(isMobile.BlackBerry())
+{
+    document.location.href = "https://www.microsoft.com/en-gb/store/apps/coffeemate/9nblggh4m5b1";
+}else if(isMobile.Windows())
+{
+    document.location.href = "https://www.microsoft.com/en-gb/store/apps/coffeemate/9nblggh4m5b1";
+}
 
 'use strict';
 
@@ -796,27 +1415,27 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
 
 'use strict';
 
-// Configuring the Deals module
-angular.module('deals').run(['Menus',
+// Configuring the Posts module
+angular.module('posts').run(['Menus',
   function (Menus) {
-    // Add the deals dropdown item
+    // Add the posts dropdown item
     Menus.addMenuItem('topbar', {
-      title: 'Deals',
-      state: 'deals',
+      title: 'Posts',
+      state: 'posts',
       type: 'dropdown',
       roles: ['*']
     });
 
     // Add the dropdown list item
-    Menus.addSubMenuItem('topbar', 'deals', {
-      title: 'List Deals',
-      state: 'deals.list'
+    Menus.addSubMenuItem('topbar', 'posts', {
+      title: 'List Posts',
+      state: 'posts.list'
     });
 
     // Add the dropdown create item
-    Menus.addSubMenuItem('topbar', 'deals', {
-      title: 'Create Deals',
-      state: 'deals.create',
+    Menus.addSubMenuItem('topbar', 'posts', {
+      title: 'Create Posts',
+      state: 'posts.create',
       roles: ['user']
     });
   }
@@ -825,33 +1444,33 @@ angular.module('deals').run(['Menus',
 'use strict';
 
 // Setting up route
-angular.module('deals').config(['$stateProvider',
+angular.module('posts').config(['$stateProvider',
   function ($stateProvider) {
-    // Deals state routing
+    // Posts state routing
     $stateProvider
-      .state('deals', {
+      .state('posts', {
         abstract: true,
-        url: '/deals',
+        url: '/posts',
         template: '<ui-view/>'
       })
-      .state('deals.list', {
+      .state('posts.list', {
         url: '',
-        templateUrl: 'modules/deals/client/views/list-deals.client.view.html'
+        templateUrl: 'modules/posts/client/views/list-posts.client.view.html'
       })
-      .state('deals.create', {
+      .state('posts.create', {
         url: '/create',
-        templateUrl: 'modules/deals/client/views/create-deal.client.view.html',
+        templateUrl: 'modules/posts/client/views/create-post.client.view.html',
         data: {
           roles: ['user', 'admin']
         }
       })
-      .state('deals.view', {
-        url: '/:dealId',
-        templateUrl: 'modules/deals/client/views/view-deal.client.view.html'
+      .state('posts.view', {
+        url: '/:postId',
+        templateUrl: 'modules/posts/client/views/view-post.client.view.html'
       })
-      .state('deals.edit', {
-        url: '/:dealId/edit',
-        templateUrl: 'modules/deals/client/views/edit-deal.client.view.html',
+      .state('posts.edit', {
+        url: '/:postId/edit',
+        templateUrl: 'modules/posts/client/views/edit-post.client.view.html',
         data: {
           roles: ['user', 'admin']
         }
@@ -861,287 +1480,187 @@ angular.module('deals').config(['$stateProvider',
 
 'use strict';
 
-// Deals controller
-angular.module('deals').controller('DealsController', ['$scope', '$timeout', '$stateParams', '$location', '$window', 'Authentication', 'Deals', 'FileUploader',
-    function($scope, $timeout, $stateParams,  $location, $window, Authentication, Deals, FileUploader) {
+// Comments controller
+angular.module('posts').controller('PostsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Posts',
+    function ($scope, $stateParams, $location, Authentication, Posts) {
 
         $scope.authentication = Authentication;
         $scope.user = Authentication.user;
-        $scope.productImageURL = 'http://placehold.it/122x122?text=no+image';
-        $scope.imageURL1 = '';
 
-        // Create file uploader instance
-        $scope.uploaderProduct = new FileUploader({
-            url: 'api/deals/picture'
-        });
+        $scope.numOfPosts = Posts.countPosts();
+        $scope.numOfPostsToday = Posts.countPostsToday();
 
-        // Set file uploader image filter
-        $scope.uploaderProduct.filters.push({
-            name: 'imageFilter',
-            fn: function (item, options) {
-                var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
-                return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
-            }
-        });
+        $scope.comments = false;
 
-        // Change user profile picture
-        $scope.uploadProductPicture = function () {
-
-            // Clear messages
-            $scope.success = $scope.error = null;
-
-            // Start upload
-            $scope.uploaderProduct.uploadAll();
+        $scope.numOfCommentsCoffee = Posts.countCustomersCoffee();
+        $scope.numOfCommentsCoupon = Posts.countCustomersCoupon();
 
 
+            // Create new Comment
+        $scope.create = function () {
+            // Create new Comment object
 
-        };
+            var post = new Posts({
 
-        // upVoteDeal
-        $scope.upVote = function (id) {
-
-            alert(id);
-            $scope.deal.votes = $scope.deal.votes+1;
-
-            var deal = $scope.deal;
-
-            deal.$update(function() {
-                $location.path('deals/' + deal._id);
-            }, function(errorResponse) {
-                $scope.error = errorResponse.data.message;
-            });
-
-
-        };
-
-
-        // downVoteDeal
-        $scope.downVote = function (id) {
-
-            //alert(id);
-            $scope.deal.votes = $scope.deal.votes-1;
-
-            var deal = $scope.deal;
-
-            deal.$update(function() {
-                $location.path('deals/' + deal._id);
-            }, function(errorResponse) {
-                $scope.error = errorResponse.data.message;
-            });
-
-
-        };
-
-        $scope.$watch('dealsCTRL.urlimage', function(newVal, oldVal){
-            console.log("Search was changed to:"+newVal);
-
-            if(newVal !== undefined){
-                $scope.productImageURL = newVal;
-
-
-            }else{
-                $scope.productImageURL = 'http://placehold.it/122x122?text=no+image';
-            }
-
-            //if(newVal.toString().length < 0){
-            //    $scope.productImageURL = newVal;
-            //}else{
-            //    $scope.productImageURL = 'http://placehold.it/122x122?text=no+image';
-            //}
-
-        });
-
-        // Called after the user selected a new picture file
-        $scope.uploaderProduct.onAfterAddingFile = function (fileItem) {
-
-            if ($window.FileReader) {
-
-                var fileReader = new FileReader();
-                fileReader.readAsDataURL(fileItem._file);
-                fileReader.onload = function (fileReaderEvent) {
-                    $timeout(function () {
-                        $scope.productImageURL = fileReaderEvent.target.result;
-
-                    }, 0);
-                };
-            }
-
-        };
-
-        // Called after the user has successfully uploaded a new picture
-        $scope.uploaderProduct.onSuccessItem = function (fileItem, response, status, headers) {
-
-            // Show success message
-            $scope.success = true;
-
-            // Populate user object
-            $scope.user = Authentication.user = response;
-
-            //// Clear upload buttons
-            $scope.cancelProductUpload();
-
-
-
-
-
-        };
-
-        // Called after the user has failed to uploaded a new picture
-        $scope.uploaderProduct.onErrorItem = function (fileItem, response, status, headers) {
-            // Clear upload buttons
-            $scope.cancelProductUpload();
-
-            // Show error message
-            $scope.error = response.message;
-        };
-
-
-        // Cancel the upload process
-        $scope.cancelProductUpload = function () {
-
-            $scope.uploaderProduct.clearQueue();
-            $scope.productImageURL = $scope.user.imageURL;
-
-        };
-
-
-        // Create new Deal
-        this.create = function () {
-
-            // Upload photo and grab URL location.
-
-
-            // Create new Deal object
-
-            var deal = new Deals({
-
-                title: this.title,
                 details: this.details,
-                retailer: this.retailer,
-                price: this.price,
-                link: this.link,
-                image: $scope.user.imageURL,
-                urlimage: this.urlimage,
-                tags: this.tags,
-                startdate: this.startdate,
-                enddate: this.enddate
-
+                userIdStringComment: $scope.authentication.user._id,
+                coffeeId: $scope.coffee._id
 
             });
-
 
             // Redirect after save
-            deal.$save(function (response) {
-
-                $location.path('deals/' + response._id);
-
+            post.$save(function (response) {
 
                 // Clear form fields
-                $scope.title = '';
                 $scope.details = '';
-                $scope.retailer = '';
-                $scope.price = '';
-                $scope.link = '';
-                $scope.image = '';
-                $scope.urlimage = '';
-                $scope.tags = '';
-                $scope.startdate = '';
-                $scope.enddate = '';
 
-
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
             });
         };
 
-        // Remove existing Deal
-        $scope.remove = function(deal) {
-            if ( deal ) {
-                deal.$remove();
+        // Create new Comment
+        $scope.createCouponComment = function () {
+            // Create new Comment object
 
-                for (var i in $scope.deals) {
-                    if ($scope.deals [i] === deal) {
-                        $scope.deals.splice(i, 1);
+            var post = new Posts({
+
+                details: this.details,
+                userIdStringComment: $scope.authentication.user._id,
+                couponId: $scope.coupon._id
+
+            });
+
+            // Redirect after save
+            post.$save(function (response) {
+
+                // Clear form fields
+                $scope.details = '';
+
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+        $scope.reload = function () {
+            location.reload();
+        };
+
+        // Remove existing Comment
+        $scope.remove = function (post) {
+            if (post) {
+                post.$remove();
+
+                for (var i in $scope.posts) {
+                    if ($scope.posts [i] === post) {
+                        $scope.posts.splice(i, 1);
                     }
                 }
             } else {
-                $scope.deal.$remove(function() {
-                    $location.path('deals');
+                $scope.post.$remove(function () {
+                    $location.path('posts');
                 });
             }
         };
 
-        // Update existing Deal
-        $scope.update = function() {
+        // Update existing Comment
+        $scope.update = function () {
+            var post = $scope.post;
 
-            var deal = $scope.deal;
+            post.$update(function () {
+                $location.path('posts/' + post._id);
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
 
-            deal.$update(function() {
-                $location.path('deals/' + deal._id);
-            }, function(errorResponse) {
+        // Find a list of Comments
+        $scope.find = function () {
+
+            $scope.posts = Posts.query();
+
+        };
+
+        // Find existing Comment
+        $scope.findOne = function () {
+            $scope.post = Posts.get({
+                postId: $stateParams.postId
+            });
+        };
+
+        $scope.voteCommentUp = function(post) {
+
+
+
+            var hasVoted5 = post.voters.filter(function (voters) {
+
+                    return voters === $scope.user._id;
+
+                }).length > 0;
+
+            // If a downvote exists remove it , else do nothing
+
+            if (!hasVoted5) {
+
+                post.votes++;
+                //alert(coffee.votes);
+                post.voters.push($scope.user);
+
+            }else{
+
+                alert("Already Voted");
+
+            }
+
+            post.$update(function () {
+                //$location.path('coffees/' + coffee._id);
+            }, function (errorResponse) {
+                // rollback votes on fail also
                 $scope.error = errorResponse.data.message;
             });
 
         };
-
-        // Find a list of Deals
-        $scope.find = function() {
-            $scope.deals = Deals.query();
-
-        };
-
-        $scope.sort = function(keyname){
-            $scope.sortKey = keyname;   //set the sortKey to the param passed
-            $scope.reverse = !$scope.reverse; //if true make it false and vice versa
-        };
-
-        // Find existing Deal
-        $scope.findOne = function() {
-            $scope.deal = Deals.get({
-                dealId: $stateParams.dealId
-            });
-        };
-
-
-
-
-
-
 
 
 
     }
 ]);
 
-
-
-
 'use strict';
 
-//Deals service used for communicating with the deals REST endpoints
-angular.module('deals').factory('Deals', ['$resource',
+//Posts service used for communicating with the posts REST endpoints
+angular.module('posts').factory('Posts', ['$resource',
   function ($resource) {
-    return $resource('deals/:dealId', {
-      dealId: '@_id'
+    return $resource('posts/:postId', {
+      postId: '@_id'
     }, {
       update: {
         method: 'PUT'
       },
-      countDeals: {
+      countPosts: {
         method: 'GET',
-        url: '/deals/dealCount',
+        url: '/posts/postCount',
         isArray: false
       },
-      countDealsToday: {
+      countPostsToday: {
         method: 'GET',
-        url: '/deals/dealCountToday',
+        url: '/posts/postCountToday',
         isArray: false
       },
-      voteUp: {
-        method: 'PUT',
-        url: '/deals/upVote'
+      countCustomersCoffee: {
+        method: 'GET',
+        url: '/posts/custCountCoffee',
+        isArray: false
       },
-      voteDown: {
-        method: 'PUT',
-        url: '/deals/downVote'
+      countCustomersCoupon: {
+        method: 'GET',
+        url: '/posts/custCountCoupon',
+        isArray: false
+      },
+      usersPostsPostedTotal: {
+        method: 'GET',
+        url: '/posts/usersCommentsPostedTotal/:userIdStringComments',
+        isArray: true
       }
     });
   }
@@ -1232,73 +1751,82 @@ angular.module('users').config(['$httpProvider',
 
 // Setting up route
 angular.module('users').config(['$stateProvider',
-  function ($stateProvider) {
-    // Users state routing
-    $stateProvider
-      .state('settings', {
-        abstract: true,
-        url: '/settings',
-        templateUrl: 'modules/users/client/views/settings/settings.client.view.html',
-        data: {
-          roles: ['user', 'admin']
-        }
-      })
-      .state('settings.profile', {
-        url: '/profile',
-        templateUrl: 'modules/users/client/views/settings/edit-profile.client.view.html'
-      })
-      .state('settings.password', {
-        url: '/password',
-        templateUrl: 'modules/users/client/views/settings/change-password.client.view.html'
-      })
-      .state('settings.accounts', {
-        url: '/accounts',
-        templateUrl: 'modules/users/client/views/settings/manage-social-accounts.client.view.html'
-      })
-      .state('settings.picture', {
-        url: '/picture',
-        templateUrl: 'modules/users/client/views/settings/change-profile-picture.client.view.html'
-      })
-      .state('authentication', {
-        abstract: true,
-        url: '/authentication',
-        templateUrl: 'modules/users/client/views/authentication/authentication.client.view.html'
-      })
-      .state('authentication.signup', {
-        url: '/signup',
-        templateUrl: 'modules/users/client/views/authentication/signup.client.view.html'
-      })
-      .state('authentication.signin', {
-        url: '/signin?err',
-        templateUrl: 'modules/users/client/views/authentication/signin.client.view.html'
-      })
-      .state('password', {
-        abstract: true,
-        url: '/password',
-        template: '<ui-view/>'
-      })
-      .state('password.forgot', {
-        url: '/forgot',
-        templateUrl: 'modules/users/client/views/password/forgot-password.client.view.html'
-      })
-      .state('password.reset', {
-        abstract: true,
-        url: '/reset',
-        template: '<ui-view/>'
-      })
-      .state('password.reset.invalid', {
-        url: '/invalid',
-        templateUrl: 'modules/users/client/views/password/reset-password-invalid.client.view.html'
-      })
-      .state('password.reset.success', {
-        url: '/success',
-        templateUrl: 'modules/users/client/views/password/reset-password-success.client.view.html'
-      })
-      .state('password.reset.form', {
-        url: '/:token',
-        templateUrl: 'modules/users/client/views/password/reset-password.client.view.html'
-      });
-  }
+    function ($stateProvider) {
+        // Users state routing
+        $stateProvider
+            .state('settings', {
+                abstract: true,
+                url: '/settings',
+                templateUrl: 'modules/users/client/views/settings/settings.client.view.html',
+                data: {
+                    roles: ['user', 'admin']
+                }
+            })
+            .state('settings.profile', {
+                url: '/profile',
+                templateUrl: 'modules/users/client/views/settings/edit-profile.client.view.html'
+            })
+            .state('settings.password', {
+                url: '/password',
+                templateUrl: 'modules/users/client/views/settings/change-password.client.view.html'
+            })
+            .state('settings.accounts', {
+                url: '/accounts',
+                templateUrl: 'modules/users/client/views/settings/manage-social-accounts.client.view.html'
+            })
+            .state('settings.picture', {
+                url: '/picture',
+                templateUrl: 'modules/users/client/views/settings/change-profile-picture.client.view.html'
+            })
+            .state('authentication', {
+                abstract: true,
+                url: '/authentication',
+                templateUrl: 'modules/users/client/views/authentication/authentication.client.view.html'
+            })
+            .state('authentication.signup', {
+                url: '/signup',
+                templateUrl: 'modules/users/client/views/authentication/signup.client.view.html'
+            })
+            .state('authentication.signin', {
+                url: '/signin?err',
+                templateUrl: 'modules/users/client/views/authentication/signin.client.view.html'
+            })
+            .state('password', {
+                abstract: true,
+                url: '/password',
+                template: '<ui-view/>'
+            })
+            .state('password.forgot', {
+                url: '/forgot',
+                templateUrl: 'modules/users/client/views/password/forgot-password.client.view.html'
+            })
+            .state('password.reset', {
+                abstract: true,
+                url: '/reset',
+                template: '<ui-view/>'
+            })
+            .state('password.reset.invalid', {
+                url: '/invalid',
+                templateUrl: 'modules/users/client/views/password/reset-password-invalid.client.view.html'
+            })
+            .state('password.reset.success', {
+                url: '/success',
+                templateUrl: 'modules/users/client/views/password/reset-password-success.client.view.html'
+            })
+            .state('users', {
+            url: '/users/:userId',
+            templateUrl: 'modules/users/client/views/view-profile.client.view.html'
+               })
+            
+            .state('members', {
+                url: '/members',
+                templateUrl: 'modules/users/client/views/list-users.client.view.html'
+            })
+            .state('password.reset.form', {
+                url: '/:token',
+                templateUrl: 'modules/users/client/views/password/reset-password.client.view.html'
+            });
+    }
 ]);
 
 'use strict';
@@ -1309,6 +1837,18 @@ angular.module('users.admin').controller('UserListController', ['$scope', '$filt
       $scope.users = data;
       $scope.buildPager();
     });
+
+    $scope.searchTab = false;
+
+    $scope.toggleSearch = function(){
+
+      if($scope.searchTab === true){
+        $scope.searchTab = false;
+      }else if($scope.searchTab === false){
+        $scope.searchTab = true;
+      }
+
+    };
 
     $scope.buildPager = function () {
       $scope.pagedItems = [];
@@ -1383,10 +1923,10 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$stat
     // Get an eventual error defined in the URL query string:
     $scope.error = $location.search().err;
 
-    // If user is signed in then redirect back home
-    if ($scope.authentication.user) {
-      $location.path('/');
-    }
+    //// If user is signed in then redirect back homep
+    //if ($scope.authentication.user) {
+    //  $location.path('/');
+    //}
 
     $scope.signup = function (isValid) {
       $scope.error = null;
@@ -1411,6 +1951,8 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$stat
     $scope.signin = function (isValid) {
       $scope.error = null;
 
+
+
       if (!isValid) {
         $scope.$broadcast('show-errors-check-validity', 'userForm');
 
@@ -1420,6 +1962,8 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$stat
       $http.post('/api/auth/signin', $scope.credentials).success(function (response) {
         // If successful we assign the response to the global user model
         $scope.authentication.user = response;
+
+          $scope.authentication.user.imageURL  = '/modules/users/client/img/profile/saveme-placeholder.png';
 
         // And redirect to the previous or home page
         $state.go($state.previous.state.name || 'home', $state.previous.params);
@@ -1489,13 +2033,86 @@ angular.module('users').controller('PasswordController', ['$scope', '$stateParam
 
 'use strict';
 
-angular.module('users').controller('ChangePasswordController', ['$scope', '$http', 'Authentication',
-  function ($scope, $http, Authentication) {
+angular.module('users').controller('ViewProfileController', ['$scope', '$http', '$resource', '$location', 'Users', 'Authentication', '$stateParams', 'Coffees', 'Posts',
+    function ($scope, $http, $resource, $location, Users, Authentication, $stateParams, Coffees, Posts) {
+
+        $scope.authentication = Authentication;
+        $scope.user = Authentication.user;
+
+        $http.get('api/users/' + $stateParams.userId).success(function (data) {
+            $scope.profile = data;
+        });
+
+        $http.get('coffees/usersCoffeesPostedTotal/' + $stateParams.userId).success(function (data1) {
+            $scope.coffeesByUser = data1;
+
+            $scope.totalUpvotes = 0;
+            $scope.totalDownvotes = 0;
+
+            for (var i = 0; i < $scope.coffeesByUser.length; i++) {
+
+                $scope.totalUpvotes = $scope.totalUpvotes + $scope.coffeesByUser[i].upVoters.length;
+            }
+
+            for (var x = 0; x < $scope.coffeesByUser.length; x++) {
+
+                $scope.totalDownvotes = $scope.totalDownvotes + $scope.coffeesByUser[x].downVoters.length;
+            }
+
+        });
+
+        $http.get('coffees/usersUpvotesTotal/' + $stateParams.userId).success(function (data4) {
+            $scope.upvotesToUser = data4;
+        });
+        
+
+        $http.get('posts/usersCommentsPostedTotal/' + $stateParams.userId).success(function (data3) {
+            $scope.commentsByUser = data3;
+        });
+
+
+        $scope.capatilize = function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        };
+
+        $scope.myPage = false;
+        if ($stateParams.userId === $scope.authentication.user._id) {
+            $scope.myPage = true;
+        }
+
+
+
+    }
+]);
+
+'use strict';
+
+angular.module('users').controller('ChangePasswordController', ['$location','$window', '$state', '$scope', '$http', 'Authentication',
+  function ($location, $window, $state, $scope, $http, Authentication) {
     $scope.user = Authentication.user;
+    $scope.authentication = Authentication;
+
+    //be sure to inject $scope and $location
+    $scope.changeLocation = function (url, forceReload) {
+      $scope = $scope || angular.element(document).scope();
+      if (forceReload || $scope.$$phase) {
+        window.location = url;
+      }
+      else {
+        //only use this if you want to replace the history stack
+        //$location.path(url).replace();
+
+        //this this if you want to change the URL and add it to the history stack
+        $location.path(url);
+        $scope.$apply();
+      }
+    };
+
 
     // Change user password
     $scope.changeUserPassword = function (isValid) {
       $scope.success = $scope.error = null;
+
 
       if (!isValid) {
         $scope.$broadcast('show-errors-check-validity', 'passwordForm');
@@ -1504,10 +2121,14 @@ angular.module('users').controller('ChangePasswordController', ['$scope', '$http
       }
 
       $http.post('/api/users/password', $scope.passwordDetails).success(function (response) {
+
+        $scope.changeLocation('/settings/picture');
         // If successful show success message and clear form
         $scope.$broadcast('show-errors-reset', 'passwordForm');
         $scope.success = true;
         $scope.passwordDetails = null;
+        // And redirect to the previous or home page
+
       }).error(function (response) {
         $scope.error = response.message;
       });
@@ -1517,77 +2138,188 @@ angular.module('users').controller('ChangePasswordController', ['$scope', '$http
 
 'use strict';
 
-angular.module('users').controller('ChangeProfilePictureController', ['$scope', '$timeout', '$window', 'Authentication', 'FileUploader',
-  function ($scope, $timeout, $window, Authentication, FileUploader) {
+angular.module('users').controller('ChangeProfilePictureController', ['$scope', '$timeout', '$location', '$window', 'Authentication', 'FileUploader', 'Users',
+    function ($scope, $timeout, $window, $location, Authentication, FileUploader, Users) {
 
-    $scope.user = Authentication.user;
-    $scope.imageURL = $scope.user.profileImageURL;
+        $scope.user = Authentication.user;
+        $scope.imageURL = $scope.user.profileImageURL;
+        $scope.avatarSelected = false;
 
-    // Create file uploader instance
-    $scope.uploader = new FileUploader({
-      url: 'api/users/picture'
-    });
 
-    // Set file uploader image filter
-    $scope.uploader.filters.push({
-      name: 'imageFilter',
-      fn: function (item, options) {
-        var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
-        return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
-      }
-    });
+        if ($scope.user.provider === 'google') {
 
-    // Called after the user selected a new picture file
-    $scope.uploader.onAfterAddingFile = function (fileItem) {
-      if ($window.FileReader) {
-        var fileReader = new FileReader();
-        fileReader.readAsDataURL(fileItem._file);
+            var full = $scope.user.providerData.image.url;
+            full = full.substring(0, full.length - 2);
 
-        fileReader.onload = function (fileReaderEvent) {
-          $timeout(function () {
-            $scope.imageURL = fileReaderEvent.target.result;
-          }, 0);
+            $scope.changedAvatar = full + '120';
+
+        }
+
+
+        $scope.randomAvatar1 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+        $scope.randomAvatar2 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+        $scope.randomAvatar3 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+        $scope.randomAvatar4 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+        $scope.randomAvatar5 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+        $scope.randomAvatar6 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+        $scope.randomAvatar7 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+        $scope.randomAvatar8 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+        $scope.randomAvatar9 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+        $scope.randomAvatar10 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+        $scope.randomAvatar11 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+        $scope.randomAvatar12 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+        $scope.randomAvatar13 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+        $scope.randomAvatar14 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+        $scope.randomAvatar15 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+        $scope.randomAvatar16 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+        $scope.randomAvatarFB = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+        $scope.randomAvatarG = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+
+
+        // Create file uploader instance
+        $scope.uploader = new FileUploader({
+            url: 'api/users/picture'
+        });
+
+        // Check if provider is already in use with current user
+        $scope.isConnectedSocialAccountProfile = function (provider) {
+
+            return $scope.user.provider === provider || ($scope.user.additionalProvidersData && $scope.user.additionalProvidersData[provider]);
         };
-      }
-    };
 
-    // Called after the user has successfully uploaded a new picture
-    $scope.uploader.onSuccessItem = function (fileItem, response, status, headers) {
-      // Show success message
-      $scope.success = true;
+        $scope.selectAvatar = function (imageURLIn) {
 
-      // Populate user object
-      $scope.user = Authentication.user = response;
+            $scope.imageURL = imageURLIn;
+            $scope.avatarSelected = true;
 
-      // Clear upload buttons
-      $scope.cancelUpload();
-    };
+        };
 
-    // Called after the user has failed to uploaded a new picture
-    $scope.uploader.onErrorItem = function (fileItem, response, status, headers) {
-      // Clear upload buttons
-      $scope.cancelUpload();
 
-      // Show error message
-      $scope.error = response.message;
-    };
+        $scope.randomiseAvatars = function () {
 
-    // Change user profile picture
-    $scope.uploadProfilePicture = function () {
-      // Clear messages
-      $scope.success = $scope.error = null;
+            $scope.randomAvatar1 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+            $scope.randomAvatar2 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+            $scope.randomAvatar3 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+            $scope.randomAvatar4 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+            $scope.randomAvatar5 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+            $scope.randomAvatar6 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+            $scope.randomAvatar7 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+            $scope.randomAvatar8 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+            $scope.randomAvatar9 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+            $scope.randomAvatar10 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+            $scope.randomAvatar11 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+            $scope.randomAvatar12 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+            $scope.randomAvatar13 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+            $scope.randomAvatar14 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+            $scope.randomAvatar15 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+            $scope.randomAvatar16 = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+            $scope.randomAvatarFB = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
+            $scope.randomAvatarG = '../modules/users/client/img/profile/avatars/2/' + Math.floor((Math.random() * 90) + 1) + '.png';
 
-      // Start upload
-      $scope.uploader.uploadAll();
 
-    };
+        };
 
-    // Cancel the upload process
-    $scope.cancelUpload = function () {
-      $scope.uploader.clearQueue();
-      $scope.imageURL = $scope.user.profileImageURL;
-    };
-  }
+        // Set file uploader image filter
+        $scope.uploader.filters.push({
+            name: 'imageFilter',
+            fn: function (item, options) {
+                var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+                return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+            }
+        });
+
+        // Called after the user selected a new picture file
+        $scope.uploader.onAfterAddingFile = function (fileItem) {
+            if ($window.FileReader) {
+                var fileReader = new FileReader();
+                fileReader.readAsDataURL(fileItem._file);
+
+                fileReader.onload = function (fileReaderEvent) {
+                    $timeout(function () {
+                        $scope.imageURL = fileReaderEvent.target.result;
+                    }, 0);
+                };
+            }
+        };
+
+        // Called after the user has successfully uploaded a new picture
+        $scope.uploader.onSuccessItem = function (fileItem, response, status, headers) {
+            // Show success message
+            $scope.success = true;
+
+            // Populate user object
+            $scope.user = Authentication.user = response;
+
+            // Clear upload buttons
+            $scope.cancelUpload();
+        };
+
+        // Called after the user has failed to uploaded a new picture
+        $scope.uploader.onErrorItem = function (fileItem, response, status, headers) {
+            // Clear upload buttons
+            $scope.cancelUpload();
+
+            // Show error message
+            $scope.error = response.message;
+        };
+
+        // Change user profile picture
+        $scope.uploadProfilePicture = function () {
+            // Clear messages
+            $scope.success = $scope.error = null;
+
+            // Start upload
+            $scope.uploader.uploadAll();
+
+        };
+
+        // Change user profile picture
+        $scope.uploadProfilePictureAvatar = function () {
+
+            // Clear messages
+            $scope.success = $scope.error = null;
+
+            var user = new Users($scope.user);
+
+            user.profileImageURL = $scope.imageURL;
+
+            user.$update(function (response) {
+
+                $scope.success = true;
+                Authentication.user = response;
+
+
+            }, function (response) {
+                $scope.error = response.data.message;
+            });
+
+
+        };
+
+        //be sure to inject $scope and $location
+        $scope.changeLocation = function (url, forceReload) {
+            $scope = $scope || angular.element(document).scope();
+            if (forceReload || $scope.$$phase) {
+                window.location = url;
+            }
+            else {
+                //only use this if you want to replace the history stack
+                //$location.path(url).replace();
+
+                //this this if you want to change the URL and add it to the history stack
+                $location.path(url);
+                $scope.$apply();
+            }
+        };
+
+        // Cancel the upload process
+        $scope.cancelUpload = function () {
+            $scope.uploader.clearQueue();
+            $scope.imageURL = $scope.user.profileImageURL;
+        };
+
+
+    }
 ]);
 
 'use strict';
@@ -1616,6 +2348,8 @@ angular.module('users').controller('EditProfileController', ['$scope', '$http', 
       }, function (response) {
         $scope.error = response.data.message;
       });
+
+
     };
   }
 ]);
@@ -1637,6 +2371,9 @@ angular.module('users').controller('SocialAccountsController', ['$scope', '$http
 
     // Check if provider is already in use with current user
     $scope.isConnectedSocialAccount = function (provider) {
+
+
+
       return $scope.user.provider === provider || ($scope.user.additionalProvidersData && $scope.user.additionalProvidersData[provider]);
     };
 
